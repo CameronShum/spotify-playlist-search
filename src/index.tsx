@@ -1,10 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createGlobalStyle } from 'styled-components';
+import { MainPage } from 'components';
 import reportWebVitals from './reportWebVitals';
+
+const GlobalStyle = createGlobalStyle`
+  body {
+    width: 100%;
+    height: 100vh;
+    margin: 0px;
+    font-family: 'Reem Kufi', sans-serif;
+  }
+  h1,h2,h3,h4,h5,h6,p {
+    margin: 0;
+  }
+`;
 
 ReactDOM.render(
   <React.StrictMode>
-    <div />
+    <GlobalStyle />
+    <MainPage />
   </React.StrictMode>,
   document.getElementById('root'),
 );
