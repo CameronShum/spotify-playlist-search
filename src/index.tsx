@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from 'styled-components/macro';
 import { MainPage } from 'components';
 import reportWebVitals from './reportWebVitals';
 
