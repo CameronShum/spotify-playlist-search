@@ -1,3 +1,4 @@
+import { XIcon } from 'icons';
 import React from 'react';
 import styled from 'styled-components/macro';
 
@@ -18,16 +19,28 @@ const TYPE_TO_COLOR = {
 
 interface BannerProps {
   type: 'info' | 'warning' | 'error',
-  message: string
+  message: string,
+  setBannerVisible: React.Dispatch<boolean>
 }
 
 /** Renders a banner at the top of the screen, with a message.
  *  @param type one of ['info', 'warning', 'error']; determines color
  *  @param message string for a message
+ *  @param setBannerVisible handles visibilitie of the banner
  */
-const Banner = ({ type, message }: BannerProps) => (
-  <Container background={TYPE_TO_COLOR[type].background} textColor={TYPE_TO_COLOR[type].text}>
+const Banner = ({ type, message, setBannerVisible }: BannerProps) => (
+  <Container
+    background={TYPE_TO_COLOR[type].background}
+    textColor={TYPE_TO_COLOR[type].text}
+  >
     {message}
+    <CloseContainer
+      background={TYPE_TO_COLOR[type].background}
+      textColor={TYPE_TO_COLOR[type].text}
+      onClick={() => setBannerVisible(false)}
+    >
+      <XIcon />
+    </CloseContainer>
   </Container>
 );
 
@@ -37,6 +50,28 @@ interface ContainerProps {
   background: string,
   textColor: string
 }
+
+const CloseContainer = styled.div<ContainerProps>`
+  width: 16px;
+  height: 16px;
+  margin-left: 20px;
+  border-radius: 100%;
+  cursor: pointer;
+  background-color: ${(props) => props.textColor};
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  > svg {
+    width: 16px;
+    height: 16px;
+
+    > path {
+      stroke: ${(props) => props.background};
+    }
+  }
+`;
 
 const Container = styled.div<ContainerProps>`
   width: 100%;

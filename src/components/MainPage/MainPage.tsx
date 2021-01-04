@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import { Banner, SearchBar } from 'components';
+import { Banner, ListBox, SearchBar } from 'components';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [bannerVisible, setBannerVisible] = useState(true);
 
   return (
     <Container>
-      <Banner type="info" message="You have nominated 5 items." />
+      {bannerVisible && (
+      <Banner
+        type="info"
+        message="You have nominated 5 items."
+        setBannerVisible={setBannerVisible}
+      />
+      )}
       <ComponnentsContainer>
         <Title>The Shoppies</Title>
         <SearchBar searchType="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <ListBox titleText={`Results for "${searchTerm}"`} />
       </ComponnentsContainer>
     </Container>
   );

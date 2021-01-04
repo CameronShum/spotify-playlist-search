@@ -8,6 +8,11 @@ interface SearchBarProps {
   setSearchTerm: React.Dispatch<string>,
 }
 
+/** The Search Bar that handles searches to OMDb Api.
+ *  @param searchType one of ['Id', 'Search']; determines search type
+ *  @param searchTerm the searchTerm in the searchbar
+ *  @param setSearchTerm the React setState for searchTerm
+ */
 const SearchBar = ({ searchType, searchTerm, setSearchTerm }: SearchBarProps) => {
   const [visible, setVisible] = useState(true);
 
