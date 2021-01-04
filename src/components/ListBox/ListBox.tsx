@@ -3,7 +3,7 @@ import styled from 'styled-components/macro';
 
 interface ListBoxProps {
   titleText: string,
-  rows: JSX.Element[],
+  rows: any,
 }
 
 /** Generic List container for rendering a set of rows.
@@ -23,9 +23,11 @@ const ListBox = ({ titleText, rows }: ListBoxProps) => {
         {titleText}
       </Title>
       <RowContainer>
-        {rows.filter((row, index) => index < rowAmount)}
+        {rows}
+        {/* {rows.filter((row: any, index: number) => index < rowAmount)} */}
       </RowContainer>
-      {rows.length > rowAmount && <SeeMore onClick={handleExpandRows}>See More</SeeMore>}
+      <SeeMore onClick={handleExpandRows}>See More</SeeMore>
+      {/* {rows.length > rowAmount && <SeeMore onClick={handleExpandRows}>See More</SeeMore>} */}
     </Container>
   );
 };

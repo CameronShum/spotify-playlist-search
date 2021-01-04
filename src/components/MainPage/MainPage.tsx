@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import { Banner, ListBox, SearchBar } from 'components';
+import {
+  Banner, ListBox, SearchBar, SearchResultRows,
+} from 'components';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,7 +20,10 @@ const MainPage = () => {
       <ComponnentsContainer>
         <Title>The Shoppies</Title>
         <SearchBar searchType="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
-        <ListBox titleText={`Results for "${searchTerm}"`} />
+        <ListBox
+          titleText={`Results for "${searchTerm}"`}
+          rows={<SearchResultRows searchTerm={searchTerm} type="Search" />}
+        />
       </ComponnentsContainer>
     </Container>
   );
