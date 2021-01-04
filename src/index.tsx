@@ -7,7 +7,6 @@ import reportWebVitals from './reportWebVitals';
 const GlobalStyle = createGlobalStyle`
   body {
     width: 100%;
-    height: 100vh;
     margin: 0px;
     font-family: 'Reem Kufi', sans-serif;
   }
