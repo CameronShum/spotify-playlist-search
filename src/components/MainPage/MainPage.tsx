@@ -3,10 +3,12 @@ import styled from 'styled-components/macro';
 import {
   Banner, ListBox, SearchBar, SearchResultRows,
 } from 'components';
+import useOmdbApi from 'hooks';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [bannerVisible, setBannerVisible] = useState(true);
+  const searchResults = useOmdbApi({ searchTerm, type: 'Search' });
 
   return (
     <Container>
@@ -21,8 +23,14 @@ const MainPage = () => {
         <Title>The Shoppies</Title>
         <SearchBar searchType="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <ListBox
-          titleText={`Results for "${searchTerm}"`}
-          rows={<SearchResultRows searchTerm={searchTerm} type="Search" />}
+          titleText={searchResults.length !== 0 ? `Results for "${searchTerm}"` : 'No results found.'}
+          rows={searchResults.map((result) => (
+            <SearchResultRows
+              title={result.Title}
+              year={result.Year}
+              imdbId={result.imdbID}
+            />
+          ))}
         />
       </ComponnentsContainer>
     </Container>

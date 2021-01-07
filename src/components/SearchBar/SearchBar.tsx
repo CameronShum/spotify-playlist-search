@@ -72,7 +72,7 @@ const SearchTypeContainer = styled.div`
   height: 50px;
   width: 100px;
   padding: 0 10px;
-  margin: 0 20px;
+  margin-right: 20px;
   border-radius: 10px;
 
   font-size: 24px;

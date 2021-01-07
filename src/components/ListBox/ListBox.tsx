@@ -23,11 +23,9 @@ const ListBox = ({ titleText, rows }: ListBoxProps) => {
         {titleText}
       </Title>
       <RowContainer>
-        {rows}
-        {/* {rows.filter((row: any, index: number) => index < rowAmount)} */}
+        {rows.filter((row: any, index: number) => index < rowAmount)}
       </RowContainer>
-      <SeeMore onClick={handleExpandRows}>See More</SeeMore>
-      {/* {rows.length > rowAmount && <SeeMore onClick={handleExpandRows}>See More</SeeMore>} */}
+      {rows.length > rowAmount && <SeeMore onClick={handleExpandRows}>See More</SeeMore>}
     </Container>
   );
 };
@@ -35,19 +33,28 @@ const ListBox = ({ titleText, rows }: ListBoxProps) => {
 export default ListBox;
 
 const Container = styled.div`
-  box-shadow: 0px 4px 4px 0px #000000 25%;
+  max-height: 300px;
+  margin-top: 20px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  border-radius: 10px;
+  box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+  
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
 const RowContainer = styled.div`
-  & > div:nth-child(2n) {
+  width: 100%;
+  & > *:nth-child(2n + 1) {
     background-color: #F3F3F3;
   }
 `;
 
 const SeeMore = styled.div`
+  padding: 5px;
   color: #2962FF;
   font-size: 16px;
   text-decoration: underline;
@@ -56,5 +63,6 @@ const SeeMore = styled.div`
 
 const Title = styled.div`
   width: 100%;
+  padding: 10px 0 10px 20px;
   font-size: 28px;
 `;

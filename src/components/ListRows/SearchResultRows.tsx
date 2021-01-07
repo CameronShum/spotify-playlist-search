@@ -1,54 +1,32 @@
-import React, { useState, useEffect } from 'react';
-// import styled from 'styled-components';
-import axios from 'axios';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
-// type nominations = {[s: string]: {id: string, name: string}}
+import React from 'react';
+import styled from 'styled-components';
 
 interface SearchResultRowsProp {
-  searchTerm: string,
-  type: 'Id' | 'Search',
-  // nominations: nominations,
-  // setNominations: React.Dispatch<nominations>
+  title: string,
+  year: string,
+  imdbId: string,
 }
 
 const SearchResultRows = ({
-  searchTerm, type, // nominations, setNominations,
-}: SearchResultRowsProp) => {
-  const [res, setRes] = useState<any>([]);
-
-  useEffect(() => {
-    if (searchTerm !== '') {
-      let params = {};
-
-      if (type === 'Search') {
-        params = {
-          s: searchTerm,
-          type: 'movie',
-          apiKey: process.env.REACT_APP_OMBD_APIKEY,
-        };
-      } else {
-        params = {
-          i: searchTerm,
-          type: 'movie',
-          apiKey: process.env.REACT_APP_OMBD_APIKEY,
-        };
-      }
-      (async function getApiResults() {
-        const getRequest = await axios.get('http://www.omdbapi.com', {
-          params,
-        });
-
-        if (getRequest.data.Response === 'Truea') {
-          setRes(type === 'Search' ? getRequest.data.Search : [getRequest.data]);
-        }
-      }());
-    }
-  });
-
-  return (res.map((value: any) => <div>{value.Title}</div>));
-};
+  title, year, imdbId,
+}: SearchResultRowsProp) => (
+  <RowContainer
+    href={`https://www.imdb.com/title/${imdbId}/`}
+    target="_blank"
+  >
+    {`${title} (${year})`}
+  </RowContainer>
+);
 
 export default SearchResultRows;
+
+const RowContainer = styled.a`
+  width: 100%;
+  padding: 10px 10px 10px 20px;
+  font-size: 20px;
+  box-sizing: border-box;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
