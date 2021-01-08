@@ -1,26 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
+import { TrashIcon } from 'icons';
 
 interface SearchResultRowsProp {
   title: string,
   year: string,
-  imdbId: string,
+  removeNomination: () => void
 }
 
 const SearchResultRows = ({
-  title, year, imdbId,
+  title, year, removeNomination,
 }: SearchResultRowsProp) => (
-  <RowContainer
-    href={`https://www.imdb.com/title/${imdbId}/`}
-    target="_blank"
-  >
-    {`${title} (${year})`}
+  <RowContainer>
+    <div>
+      {`${title} (${year})`}
+    </div>
+    <ImageContainer onClick={removeNomination}>
+      <TrashIcon />
+    </ImageContainer>
   </RowContainer>
 );
 
 export default SearchResultRows;
 
-const RowContainer = styled.a`
+const ImageContainer = styled.div`
+  cursor: pointer;
+
+  & > svg > path {
+    stroke: #D50000;
+    
+  }
+`;
+
+const RowContainer = styled.div`
   width: 100%;
   padding: 10px 10px 10px 20px;
   font-size: 20px;

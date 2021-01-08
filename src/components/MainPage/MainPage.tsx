@@ -1,21 +1,29 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import {
-  Banner, ListBox, SearchBar, SearchResultRows,
+  Banner, ListBox, SearchBar, SearchResultRow,
 } from 'components';
-import useOmdbApi from 'hooks';
+import { useGetBannerState, useOmdbApi } from 'hooks';
+import nominationsType from 'types/nominations.types';
+import { NominationsRow } from 'components/ListRows';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [bannerVisible, setBannerVisible] = useState(true);
+  const [bannerVisible, setBannerVisible] = useState(false);
+  const [nominations, setNominations] = useState<nominationsType>({});
   const searchResults = useOmdbApi({ searchTerm, type: 'Search' });
+  const bannerState = useGetBannerState({
+    nominationsLength:
+    Object.keys(nominations).filter((key) => nominations[key].nominated).length,
+    setBannerVisible,
+  });
 
   return (
     <Container>
       {bannerVisible && (
       <Banner
-        type="info"
-        message="You have nominated 5 items."
+        type={bannerState.type}
+        message={bannerState.message}
         setBannerVisible={setBannerVisible}
       />
       )}
@@ -23,13 +31,30 @@ const MainPage = () => {
         <Title>The Shoppies</Title>
         <SearchBar searchType="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
         <ListBox
-          titleText={searchResults.length !== 0 ? `Results for "${searchTerm}"` : 'No results found.'}
+          titleText={searchTerm && searchResults.length !== 0 ? `Results for "${searchTerm}"` : 'No results found.'}
           rows={searchResults.map((result) => (
-            <SearchResultRows
+            <SearchResultRow
               title={result.Title}
               year={result.Year}
               imdbId={result.imdbID}
+              nominations={nominations}
+              setNominations={setNominations}
             />
+          ))}
+        />
+        <ListBox
+          titleText="Nominations"
+          rows={Object.keys(nominations).map((key) => (
+            nominations[key].nominated && (
+            <NominationsRow
+              title={nominations[key].title}
+              year={nominations[key].year}
+              removeNomination={() => setNominations({
+                ...nominations,
+                [key]: { ...nominations[key], nominated: false },
+              })}
+            />
+            )
           ))}
         />
       </ComponnentsContainer>

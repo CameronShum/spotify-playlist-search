@@ -33,8 +33,9 @@ const ListBox = ({ titleText, rows }: ListBoxProps) => {
 export default ListBox;
 
 const Container = styled.div`
+  min-height: 150px;
   max-height: 300px;
-  margin-top: 20px;
+  margin-top: 50px;
   overflow-y: auto;
   overflow-x: hidden;
 
