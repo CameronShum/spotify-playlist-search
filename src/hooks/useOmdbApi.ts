@@ -43,6 +43,8 @@ const useOmdbApi = ({
 
         if (getRequest.data.Response === 'True') {
           setRes(type === 'Search' ? getRequest.data.Search : [getRequest.data]);
+        } else {
+          setRes([]);
         }
       }());
     }
