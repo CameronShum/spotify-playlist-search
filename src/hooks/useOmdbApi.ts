@@ -48,7 +48,7 @@ const useOmdbApi = ({
         }
       }());
     }
-  });
+  }, [searchTerm, type]);
 
   return res;
 };

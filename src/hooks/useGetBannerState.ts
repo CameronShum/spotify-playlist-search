@@ -31,7 +31,7 @@ const useGetBannerState = ({
       Please remove items from the nominations`,
       });
     }
-  });
+  }, [nominationsLength, setBannerVisible]);
 
   return bannerState;
 };

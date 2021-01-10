@@ -31,6 +31,7 @@ const SearchResultRow = ({
         target="_blank"
         rel="noreferrer"
       >
+        {console.log(`Rerender Search: ${title} (${year})`)}
         {`${title} (${year})`}
       </a>
       <NominateContainer
@@ -44,7 +45,7 @@ const SearchResultRow = ({
   );
 };
 
-export default SearchResultRow;
+export default React.memo(SearchResultRow);
 
 const ImageContainer = styled.div`
   cursor: pointer;

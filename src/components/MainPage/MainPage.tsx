@@ -34,6 +34,7 @@ const MainPage = () => {
           titleText={searchTerm && searchResults.length !== 0 ? `Results for "${searchTerm}"` : 'No results found.'}
           rows={searchResults.map((result) => (
             <SearchResultRow
+              key={result.imdbID}
               title={result.Title}
               year={result.Year}
               imdbId={result.imdbID}
@@ -44,18 +45,24 @@ const MainPage = () => {
         />
         <ListBox
           titleText="Nominations"
-          rows={Object.keys(nominations).map((key) => (
-            nominations[key].nominated && (
-            <NominationsRow
-              title={nominations[key].title}
-              year={nominations[key].year}
-              removeNomination={() => setNominations({
+          rows={Object.keys(nominations).map((key) => {
+            const handleRemove = () => {
+              setNominations({
                 ...nominations,
                 [key]: { ...nominations[key], nominated: false },
-              })}
-            />
-            )
-          ))}
+              });
+            };
+
+            return (
+              nominations[key].nominated && (
+              <NominationsRow
+                key={key}
+                title={nominations[key].title}
+                year={nominations[key].year}
+                removeNomination={handleRemove}
+              />
+              ));
+          })}
         />
       </ComponnentsContainer>
     </Container>

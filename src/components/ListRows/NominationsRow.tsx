@@ -2,33 +2,34 @@ import React from 'react';
 import styled from 'styled-components';
 import { TrashIcon } from 'icons';
 
-interface SearchResultRowsProp {
+interface NominationsRowProp {
   title: string,
   year: string,
   removeNomination: () => void
 }
 
-const SearchResultRows = ({
+const NominationsRow = ({
   title, year, removeNomination,
-}: SearchResultRowsProp) => (
+}: NominationsRowProp) => (
   <RowContainer>
     <div>
+      {console.log(`Rerender Nominations: ${title} (${year})`)}
       {`${title} (${year})`}
     </div>
-    <ImageContainer onClick={removeNomination}>
+    <ImageContainer
+      onClick={removeNomination}
+    >
       <TrashIcon />
     </ImageContainer>
   </RowContainer>
 );
 
-export default SearchResultRows;
+export default React.memo(NominationsRow);
 
 const ImageContainer = styled.div`
   cursor: pointer;
-
   & > svg > path {
     stroke: #D50000;
-    
   }
 `;
 
