@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 import { XIcon } from 'icons';
 
 interface SearchBarProps {
   searchType: 'Id' | 'Search',
+  setSearchType: React.Dispatch<'Id' | 'Search'>
   searchTerm: string,
   setSearchTerm: React.Dispatch<string>,
 }
@@ -13,28 +14,26 @@ interface SearchBarProps {
  *  @param searchTerm the searchTerm in the searchbar
  *  @param setSearchTerm the React setState for searchTerm
  */
-const SearchBar = ({ searchType, searchTerm, setSearchTerm }: SearchBarProps) => {
-  const [visible, setVisible] = useState(true);
+const SearchBar = ({
+  searchType, setSearchType, searchTerm, setSearchTerm,
+}: SearchBarProps) => (
+  <Container>
+    <SearchTypeContainer onClick={() => setSearchType(searchType === 'Search' ? 'Id' : 'Search')}>
+      {searchType}
+    </SearchTypeContainer>
+    <SearchInput
+      placeholder={searchType === 'Id'
+        ? 'Enter IMDb movie ID, ie. "tt3783958"'
+        : 'Search for a movie, ie. "La La land"'}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      value={searchTerm}
+    />
+    <ClearSearchContainer onClick={() => setSearchTerm('')}>
+      {searchTerm && <XIcon />}
+    </ClearSearchContainer>
+  </Container>
 
-  return (
-    <Container>
-      <SearchTypeContainer onClick={() => setVisible(!visible)}>
-        {visible && searchType}
-      </SearchTypeContainer>
-      <SearchInput
-        placeholder={searchType === 'Id'
-          ? 'Enter IMDb movie ID, ie. "tt3783958"'
-          : 'Search for a movie, ie. "La La land"'}
-        onChange={(e) => setSearchTerm(e.target.value)}
-        value={searchTerm}
-      />
-      <ClearSearchContainer onClick={() => setSearchTerm('')}>
-        {searchTerm && <XIcon />}
-      </ClearSearchContainer>
-    </Container>
-
-  );
-};
+);
 
 export default React.memo(SearchBar);
 

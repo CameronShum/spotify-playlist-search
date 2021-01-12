@@ -9,9 +9,10 @@ import { NominationsRow } from 'components/ListRows';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchType, setSearchType] = useState<'Search' | 'Id'>('Search');
   const [bannerVisible, setBannerVisible] = useState(false);
   const [nominations, setNominations] = useState<nominationsType>({});
-  const searchResults = useOmdbApi({ searchTerm, type: 'Search' });
+  const searchResults = useOmdbApi({ searchTerm, type: searchType });
   const bannerState = useGetBannerState({
     nominationsLength:
     Object.keys(nominations).filter((key) => nominations[key].nominated).length,
@@ -29,19 +30,36 @@ const MainPage = () => {
       )}
       <ComponnentsContainer>
         <Title>The Shoppies</Title>
-        <SearchBar searchType="Search" searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+        <SearchBar
+          searchType={searchType}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          setSearchType={setSearchType}
+        />
         <ListBox
           titleText={searchTerm && searchResults.length !== 0 ? `Results for "${searchTerm}"` : 'No results found.'}
-          rows={searchResults.map((result) => (
-            <SearchResultRow
-              key={result.imdbID}
-              title={result.Title}
-              year={result.Year}
-              imdbId={result.imdbID}
-              nominations={nominations}
-              setNominations={setNominations}
-            />
-          ))}
+          rows={searchResults.map((result) => {
+            const setNomination = () => {
+              const newNominations = { ...nominations };
+              newNominations[result.imdbID] = {
+                title: result.Title,
+                nominated: true,
+                year: result.Year,
+              };
+
+              setNominations(newNominations);
+            };
+            return (
+              <SearchResultRow
+                key={result.imdbID}
+                title={result.Title}
+                year={result.Year}
+                imdbId={result.imdbID}
+                isNominated={nominations[result.imdbID]?.nominated}
+                setNomination={setNomination}
+              />
+            );
+          })}
         />
         <ListBox
           titleText="Nominations"

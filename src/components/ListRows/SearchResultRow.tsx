@@ -1,49 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
-import nominationsType from 'types/nominations.types';
 import { PlusIcon } from 'icons';
 
 interface SearchResultRowProp {
   title: string,
   year: string,
   imdbId: string,
-  nominations: nominationsType,
-  setNominations: React.Dispatch<nominationsType>
+  isNominated: boolean,
+  setNomination: () => void
 }
 
 const SearchResultRow = ({
-  title, year, imdbId, nominations, setNominations,
-}: SearchResultRowProp) => {
-  const handleSetNomination = () => {
-    const newNominations = { ...nominations };
-    newNominations[imdbId] = {
-      title,
-      nominated: true,
-      year,
-    };
-
-    setNominations(newNominations);
-  };
-  return (
-    <RowContainer>
-      <a
-        href={`https://www.imdb.com/title/${imdbId}/`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {console.log(`Rerender Search: ${title} (${year})`)}
-        {`${title} (${year})`}
-      </a>
-      <NominateContainer
-        isNominated={nominations[imdbId] !== undefined && nominations[imdbId].nominated}
-      >
-        <ImageContainer onClick={handleSetNomination}>
-          <PlusIcon />
-        </ImageContainer>
-      </NominateContainer>
-    </RowContainer>
-  );
-};
+  title, year, imdbId, isNominated, setNomination,
+}: SearchResultRowProp) => (
+  <RowContainer>
+    <a
+      href={`https://www.imdb.com/title/${imdbId}/`}
+      target="_blank"
+      rel="noreferrer"
+    >
+      {`${title} (${year})`}
+    </a>
+    <NominateContainer
+      isNominated={isNominated}
+    >
+      <ImageContainer onClick={setNomination}>
+        <PlusIcon />
+      </ImageContainer>
+    </NominateContainer>
+  </RowContainer>
+);
 
 export default React.memo(SearchResultRow);
 

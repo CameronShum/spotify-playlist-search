@@ -13,7 +13,6 @@ const NominationsRow = ({
 }: NominationsRowProp) => (
   <RowContainer>
     <div>
-      {console.log(`Rerender Nominations: ${title} (${year})`)}
       {`${title} (${year})`}
     </div>
     <ImageContainer
