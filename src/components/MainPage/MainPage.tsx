@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import {
-  Banner, ListBox, SearchBar, SearchResultRow,
+  Banner, ListBox, NominationsRow, SearchBar, SearchResultRow,
 } from 'components';
 import { useGetBannerState, useOmdbApi } from 'hooks';
 import nominationsType from 'types/nominations.types';
-import { NominationsRow } from 'components/ListRows';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
