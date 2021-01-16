@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PlusIcon } from 'icons';
-import { useFirebaseDispatch } from 'components/Firebase';
+import { useFirebaseDispatch } from 'components/Firebase/FirebaseProvider';
 
 interface SearchResultRowProp {
   title: string,

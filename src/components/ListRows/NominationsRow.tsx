@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { TrashIcon } from 'icons';
-import { useFirebaseDispatch } from 'components/Firebase';
+import { useFirebaseDispatch } from 'components/Firebase/FirebaseProvider';
 
 interface NominationsRowProp {
   title: string,

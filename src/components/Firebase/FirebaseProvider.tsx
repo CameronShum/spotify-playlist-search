@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useReducer, useState } from 'react';
 import firebase from 'firebase';
 import 'firebase/database';
 import dotenv from 'dotenv';
-import nominations from 'types/nominations.types';
+import firebaseReducer, { Action, State } from './firebaseReducer';
 
 dotenv.config();
 
@@ -18,20 +18,6 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-type State = nominations
-type Action = {
-  type: 'nominate',
-  payload: {
-    title: string,
-    imdbId: string,
-    year: string,
-  }
-} | {
-  type: 'remove',
-  payload: {
-    imdbId: string,
-  }
-}
 type Dispatch = (action: Action) => void
 interface FirebaseProviderProps {
   children: React.ReactNode
@@ -39,44 +25,24 @@ interface FirebaseProviderProps {
 
 const FirebaseStateContext = React.createContext<State | undefined>(undefined);
 const FirebaseDispatchContext = React.createContext<Dispatch | undefined>(undefined);
-
-const firebaseReducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'nominate': {
-      const { imdbId, title, year } = action.payload;
-      return {
-        ...state,
-        [imdbId]: {
-          title,
-          year,
-          nominated: true,
-        },
-      };
-    }
-
-    case 'remove': {
-      return {
-        ...state,
-        [action.payload.imdbId]: {
-          ...state[action.payload.imdbId],
-          nominated: false,
-        },
-      };
-    }
-
-    default: {
-      throw new Error('Unhandled action');
-    }
-  }
-};
+const UidDispatchContext = React.createContext<React.Dispatch<string> | undefined>(undefined);
 
 const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
-  const [state, dispatch] = React.useReducer(firebaseReducer, {});
+  const [uid, setUid] = useState('');
+  const [state, dispatch] = useReducer(firebaseReducer, {});
+
+  useEffect(() => {
+    if (uid) {
+      dispatch({ type: 'login', payload: { 123: { title: 'asdf', year: 'asdf' } } });
+    }
+  }, [uid]);
 
   return (
     <FirebaseStateContext.Provider value={state}>
       <FirebaseDispatchContext.Provider value={dispatch}>
-        {children}
+        <UidDispatchContext.Provider value={setUid}>
+          {children}
+        </UidDispatchContext.Provider>
       </FirebaseDispatchContext.Provider>
     </FirebaseStateContext.Provider>
   );
@@ -84,21 +50,30 @@ const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
 
 const useFirebaseState = () => {
   const context = React.useContext(FirebaseStateContext);
-
   if (context === undefined) {
     throw new Error('useFirebaseState should be used in a FirebaseProvider');
   }
-
   return context;
 };
 
 const useFirebaseDispatch = () => {
   const context = React.useContext(FirebaseDispatchContext);
-
   if (context === undefined) {
     throw new Error('useFirebaseDispatch should be used in a FirebaseProvider');
   }
   return context;
 };
 
-export { FirebaseProvider, useFirebaseState, useFirebaseDispatch };
+const useUidDispatch = () => {
+  const context = React.useContext(UidDispatchContext);
+  if (context === undefined) {
+    throw new Error('useUidDispatch should be used in a FirebaseProvider');
+  }
+  return context;
+};
+
+export {
+  useFirebaseState, useFirebaseDispatch, useUidDispatch,
+};
+
+export default FirebaseProvider;

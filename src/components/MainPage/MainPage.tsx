@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import {
-  Banner, ListBox, NominationsRow, SearchBar, SearchResultRow,
+  Banner, ListBox, NominationsRow, SearchBar, SearchResultRow, SignInButton,
 } from 'components';
 import { useGetBannerState, useOmdbApi } from 'hooks';
-import { useFirebaseState } from 'components/Firebase';
+import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,6 +27,7 @@ const MainPage = () => {
         setBannerVisible={setBannerVisible}
       />
       )}
+      <SignInButton />
       <ComponnentsContainer>
         <Title>The Shoppies</Title>
         <SearchBar
