@@ -30,7 +30,7 @@ const ListBox = ({ titleText, rows }: ListBoxProps) => {
   );
 };
 
-export default ListBox;
+export default React.memo(ListBox);
 
 const Container = styled.div`
   min-height: 150px;

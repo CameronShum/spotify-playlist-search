@@ -1,27 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
 import { TrashIcon } from 'icons';
+import { useFirebaseDispatch } from 'components/Firebase';
 
 interface NominationsRowProp {
   title: string,
   year: string,
-  removeNomination: () => void
+  imdbId: string,
 }
 
 const NominationsRow = ({
-  title, year, removeNomination,
-}: NominationsRowProp) => (
-  <RowContainer>
-    <div>
-      {`${title} (${year})`}
-    </div>
-    <ImageContainer
-      onClick={removeNomination}
-    >
-      <TrashIcon />
-    </ImageContainer>
-  </RowContainer>
-);
+  title, year, imdbId,
+}: NominationsRowProp) => {
+  const dispatch = useFirebaseDispatch();
+  const removeNomination = () => {
+    dispatch({ type: 'remove', payload: { imdbId } });
+  };
+
+  return (
+    <RowContainer>
+      <div>
+        {`${title} (${year})`}
+      </div>
+      <ImageContainer
+        onClick={removeNomination}
+      >
+        <TrashIcon />
+      </ImageContainer>
+    </RowContainer>
+  );
+};
 
 export default React.memo(NominationsRow);
 

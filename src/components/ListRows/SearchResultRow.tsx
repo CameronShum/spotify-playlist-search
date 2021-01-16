@@ -1,35 +1,49 @@
 import React from 'react';
 import styled from 'styled-components';
 import { PlusIcon } from 'icons';
+import { useFirebaseDispatch } from 'components/Firebase';
 
 interface SearchResultRowProp {
   title: string,
   year: string,
   imdbId: string,
   isNominated: boolean,
-  setNomination: () => void
 }
 
 const SearchResultRow = ({
-  title, year, imdbId, isNominated, setNomination,
-}: SearchResultRowProp) => (
-  <RowContainer>
-    <a
-      href={`https://www.imdb.com/title/${imdbId}/`}
-      target="_blank"
-      rel="noreferrer"
-    >
-      {`${title} (${year})`}
-    </a>
-    <NominateContainer
-      isNominated={isNominated}
-    >
-      <ImageContainer onClick={setNomination}>
-        <PlusIcon />
-      </ImageContainer>
-    </NominateContainer>
-  </RowContainer>
-);
+  title, year, imdbId, isNominated,
+}: SearchResultRowProp) => {
+  const dispatch = useFirebaseDispatch();
+  const setNomination = () => {
+    dispatch({
+      type: 'nominate',
+      payload: {
+        title,
+        imdbId,
+        year,
+      },
+    });
+  };
+
+  return (
+    <RowContainer>
+      <a
+        href={`https://www.imdb.com/title/${imdbId}/`}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {`${title} (${year})`}
+      </a>
+      <NominateContainer
+        isNominated={isNominated}
+      >
+        <ImageContainer onClick={setNomination}>
+          <PlusIcon />
+        </ImageContainer>
+      </NominateContainer>
+    </RowContainer>
+  );
+};
 
 export default React.memo(SearchResultRow);
 

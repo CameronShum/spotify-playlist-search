@@ -93,7 +93,7 @@ const useFirebaseState = () => {
 };
 
 const useFirebaseDispatch = () => {
-  const context = React.useContext(FirebaseStateContext);
+  const context = React.useContext(FirebaseDispatchContext);
 
   if (context === undefined) {
     throw new Error('useFirebaseDispatch should be used in a FirebaseProvider');
