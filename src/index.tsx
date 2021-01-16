@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { createGlobalStyle } from 'styled-components/macro';
-import { MainPage } from 'components';
-import { FirebaseProvider } from 'components/Firebase/FirebaseProvider';
+import { MainPageWithProviders } from 'components';
 import reportWebVitals from './reportWebVitals';
 
 const GlobalStyle = createGlobalStyle`
@@ -19,9 +18,7 @@ const GlobalStyle = createGlobalStyle`
 ReactDOM.render(
   <React.StrictMode>
     <GlobalStyle />
-    <FirebaseProvider>
-      <MainPage />
-    </FirebaseProvider>
+    <MainPageWithProviders />
   </React.StrictMode>,
   document.getElementById('root'),
 );
