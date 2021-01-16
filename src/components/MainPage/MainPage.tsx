@@ -47,18 +47,33 @@ const MainPage = () => {
             />
           ))}
         />
-        <ListBox
-          titleText="Nominations"
-          rows={Object.keys(nominations).map((key) => (
-            nominations[key].nominated && (
+        <FlexRow>
+          <ListBox
+            titleText="Nominations"
+            rows={Object.keys(nominations).map((key) => (
+              nominations[key].nominated && (
               <NominationsRow
                 key={key}
                 title={nominations[key].title}
                 year={nominations[key].year}
                 imdbId={key}
               />
-            )))}
-        />
+              )))}
+          />
+          <Seperator />
+          <ListBox
+            titleText="Global Nominations"
+            rows={Object.keys(nominations).map((key) => (
+              nominations[key].nominated && (
+              <NominationsRow
+                key={key}
+                title={nominations[key].title}
+                year={nominations[key].year}
+                imdbId={key}
+              />
+              )))}
+          />
+        </FlexRow>
       </ComponnentsContainer>
     </Container>
   );
@@ -75,6 +90,17 @@ const Container = styled.div`
 const ComponnentsContainer = styled.div`
   flex: 1;
   padding: 50px;
+`;
+
+const FlexRow = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+`;
+
+const Seperator = styled.div`
+  width: 30px;
 `;
 
 const Title = styled.div`
