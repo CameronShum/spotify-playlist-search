@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import isEqual from 'lodash/isEqual';
 import styled from 'styled-components/macro';
 
 interface ListBoxProps {
   titleText: string,
-  rows: any,
+  rows: React.ReactNode[],
 }
 
 /** Generic List container for rendering a set of rows.
@@ -30,7 +31,8 @@ const ListBox = ({ titleText, rows }: ListBoxProps) => {
   );
 };
 
-export default React.memo(ListBox);
+export default React.memo(ListBox,
+  (prevProps, nextProps) => isEqual(prevProps, nextProps));
 
 const Container = styled.div`
   min-height: 150px;
