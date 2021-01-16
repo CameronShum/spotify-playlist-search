@@ -84,7 +84,6 @@ const firebaseReducer = (state: State, action: Action): State => {
       const { payload } = action;
       return {
         ...payload,
-        ...state,
       };
     }
 

@@ -18,6 +18,7 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+firebase.auth().setPersistence(firebase.auth.Auth.Persistence.NONE);
 
 type Dispatch = (action: Action) => void
 interface FirebaseProviderProps {
