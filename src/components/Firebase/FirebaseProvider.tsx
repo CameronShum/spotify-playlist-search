@@ -2,6 +2,7 @@ import React, { useEffect, useReducer, useState } from 'react';
 import firebase from 'firebase';
 import 'firebase/database';
 import dotenv from 'dotenv';
+import Nominations from 'types/nominations.types';
 import firebaseReducer, { Action, State } from './firebaseReducer';
 
 dotenv.config();
@@ -32,8 +33,31 @@ const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
   const [state, dispatch] = useReducer(firebaseReducer, {});
 
   useEffect(() => {
+    async function login() {
+      const firebaseNominations: Nominations = {};
+
+      const userData = await firebase.database().ref().child(`users/${uid}`).once('value');
+
+      if (userData.val()) {
+        const items = Object.keys(userData.val())
+          .map((key) => firebase.database().ref().child(`items/${key}`).once('value'));
+        const fullfilledItems = await Promise.all(items);
+
+        fullfilledItems.forEach((snapshot) => {
+          const nomination = snapshot.val();
+          firebaseNominations[nomination.imdbId] = {
+            title: nomination.title,
+            year: nomination.year,
+            nominated: true,
+          };
+        });
+
+        dispatch({ type: 'login', payload: firebaseNominations });
+      }
+    }
+
     if (uid) {
-      dispatch({ type: 'login', payload: { 123: { title: 'asdf', year: 'asdf' } } });
+      login();
     }
   }, [uid]);
 

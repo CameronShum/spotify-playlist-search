@@ -27,8 +27,8 @@ const MainPage = () => {
         setBannerVisible={setBannerVisible}
       />
       )}
-      <SignInButton />
       <ComponnentsContainer>
+        <SignInButton />
         <Title>The Shoppies</Title>
         <SearchBar
           searchType={searchType}
@@ -89,6 +89,7 @@ const Container = styled.div`
 `;
 
 const ComponnentsContainer = styled.div`
+  position: relative;
   flex: 1;
   padding: 50px;
 `;
