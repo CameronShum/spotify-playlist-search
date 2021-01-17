@@ -19,7 +19,7 @@ const SearchBar = ({
 }: SearchBarProps) => (
   <Container>
     <SearchTypeContainer onClick={() => setSearchType(searchType === 'Search' ? 'Id' : 'Search')}>
-      {searchType}
+      {`Type: ${searchType}`}
     </SearchTypeContainer>
     <SearchInput
       placeholder={searchType === 'Id'
@@ -69,7 +69,7 @@ const SearchInput = styled.input`
 
 const SearchTypeContainer = styled.div`
   height: 50px;
-  width: 100px;
+  width: 140px;
   padding: 0 10px;
   margin-right: 20px;
   border-radius: 10px;
