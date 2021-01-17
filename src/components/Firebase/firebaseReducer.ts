@@ -29,6 +29,11 @@ type Action = {
   type: 'signOut',
 }
 
+/**
+ * Firebase reducer to handle state changes
+ * @param state the previous state of the application
+ * @param action the incoming action and payload
+ */
 const firebaseReducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'nominate': {

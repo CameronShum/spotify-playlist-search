@@ -9,7 +9,7 @@ interface ListBoxProps {
 
 /** Generic List container for rendering a set of rows.
  *  @param titleText string for the title of the container
- *  @param rows an array of JSX.Elements
+ *  @param rows an array of React.ReactNode
  */
 const ListBox = ({ titleText, rows }: ListBoxProps) => {
   const [rowAmount, setRowAmount] = useState(5);

@@ -7,6 +7,12 @@ interface GlobalNominationsRowProps {
   year: string,
 }
 
+/**
+ * A row for the Global Nominations
+ * @param title Title of the imdb movie
+ * @param count Count of nominations
+ * @param year Year of the movie
+ */
 const GlobalNominationsRow = ({ title, count, year }: GlobalNominationsRowProps) => (
   <RowContainer>
     <div>

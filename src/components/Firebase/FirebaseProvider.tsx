@@ -30,6 +30,11 @@ const FirebaseStateContext = React.createContext<State | undefined>(undefined);
 const FirebaseDispatchContext = React.createContext<Dispatch | undefined>(undefined);
 const UidDispatchContext = React.createContext<React.Dispatch<string> | undefined>(undefined);
 
+/**
+ * Connects the child component to the Firebase State context
+ * @param children a React node that subscribes to the context
+ */
+
 const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
   const [uid, setUid] = useState('');
   const [state, dispatch] = useReducer(firebaseReducer,
@@ -103,6 +108,9 @@ const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
   );
 };
 
+/**
+ * Hook to use the FirebaseState
+ */
 const useFirebaseState = () => {
   const context = React.useContext(FirebaseStateContext);
   if (context === undefined) {
@@ -111,6 +119,9 @@ const useFirebaseState = () => {
   return context;
 };
 
+/**
+ * Hook to use the Firebase Dispatch. See {@link firebaseReducer}
+ */
 const useFirebaseDispatch = () => {
   const context = React.useContext(FirebaseDispatchContext);
   if (context === undefined) {
@@ -119,6 +130,9 @@ const useFirebaseDispatch = () => {
   return context;
 };
 
+/**
+ * Hook to use the Uid Dispatch, to verify sign in
+ */
 const useUidDispatch = () => {
   const context = React.useContext(UidDispatchContext);
   if (context === undefined) {

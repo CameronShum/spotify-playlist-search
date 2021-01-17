@@ -9,6 +9,12 @@ interface NominationsRowProp {
   imdbId: string,
 }
 
+/**
+ * A row in the Nominations Box, can remove nomination from state.
+ * @param title Title of the imdb movie
+ * @param year Year of the movie
+ * @param imdbId Unique imdbId for the movie
+ */
 const NominationsRow = ({
   title, year, imdbId,
 }: NominationsRowProp) => {

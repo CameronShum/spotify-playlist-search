@@ -11,6 +11,13 @@ interface BannerState {
   message: string,
 }
 
+/**
+ * Determines the current state of the banner from nominations length and uid
+ * @param nominationsLength length of the nominations array
+ * @param uid the firebase uid for a user
+ * @param setBannerVisible React dispatch to toggle visibility of the banner
+ */
+
 const useGetBannerState = ({
   nominationsLength,
   uid,

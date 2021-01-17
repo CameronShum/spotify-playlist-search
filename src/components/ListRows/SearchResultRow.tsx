@@ -10,6 +10,13 @@ interface SearchResultRowProp {
   isNominated: boolean,
 }
 
+/**
+ * A row in the Search Results Box, can add nomination to state.
+ * @param title Title of the imdb movie
+ * @param year Year of the movie
+ * @param imdbId Unique imdbId for the movie
+ * @param isNominated flag to disable nomination button
+ */
 const SearchResultRow = ({
   title, year, imdbId, isNominated,
 }: SearchResultRowProp) => {

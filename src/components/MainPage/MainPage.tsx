@@ -7,6 +7,10 @@ import {
 import { useGetBannerState, useOmdbApi } from 'hooks';
 import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
 
+/**
+ * Main Component for the app. Contains all the major sub components
+ */
+
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType, setSearchType] = useState<'Search' | 'Id'>('Search');

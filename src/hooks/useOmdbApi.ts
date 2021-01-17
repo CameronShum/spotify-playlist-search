@@ -9,6 +9,11 @@ interface useOmdbApiProps {
   type: 'Id' | 'Search',
 }
 
+/**
+ * Searches Omdb's Api for a search term
+ * @param searchTerm the term to search for
+ * @param type the search type, either "Id" or "Search"
+ */
 const useOmdbApi = ({
   searchTerm, type,
 }: useOmdbApiProps): {Title: string, Year: string, imdbID: string}[] => {

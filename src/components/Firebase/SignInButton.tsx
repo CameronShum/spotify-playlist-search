@@ -3,6 +3,9 @@ import styled from 'styled-components/macro';
 import firebase from 'firebase/app';
 import { useFirebaseDispatch, useUidDispatch } from './FirebaseProvider';
 
+/**
+ * The top right Sign In and Sign Out button. Dispatches Uid changes
+ */
 const SignInButton = () => {
   const [uid, setUid] = useState('');
   const dispatchUid = useUidDispatch();
