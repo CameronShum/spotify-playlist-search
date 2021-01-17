@@ -66,7 +66,11 @@ const SeeMore = styled.div`
 `;
 
 const Title = styled.div`
+  position: sticky;
+  top: 0px;
   width: 100%;
+
+  background-color: white;
   padding: 10px 0 10px 20px;
   font-size: 28px;
 `;
