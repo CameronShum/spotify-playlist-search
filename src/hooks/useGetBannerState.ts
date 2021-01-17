@@ -39,6 +39,8 @@ const useGetBannerState = ({
         message: `Warning: You are nominating more than 5 items. 
       Please remove items from the nominations`,
       });
+    } else {
+      setBannerVisible(false);
     }
   }, [nominationsLength, setBannerVisible]);
 
@@ -49,6 +51,8 @@ const useGetBannerState = ({
         type: 'warning',
         message: 'Warning: Sign in to save your nominations, and add to the Global Nominations Counter!',
       });
+    } else {
+      setBannerVisible(false);
     }
   }, [uid]);
 
