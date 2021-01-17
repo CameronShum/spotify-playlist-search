@@ -20,11 +20,13 @@ type Action = {
     imdbId: string,
   }
 } | {
-  type: 'login',
+  type: 'signIn',
   payload: Nominations
 } | {
   type: 'initGlobalNominations',
   payload: GlobalNominations
+} | {
+  type: 'signOut',
 }
 
 const firebaseReducer = (state: State, action: Action): State => {
@@ -112,13 +114,20 @@ const firebaseReducer = (state: State, action: Action): State => {
       return nextState;
     }
 
-    case 'login': {
+    case 'signIn': {
       const { payload } = action;
       return {
         ...state,
         nominations: {
           ...payload,
         },
+      };
+    }
+
+    case 'signOut': {
+      return {
+        ...state,
+        nominations: {},
       };
     }
 

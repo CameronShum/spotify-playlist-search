@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 interface useGetBannerStateProps {
   nominationsLength: number,
+  uid: string | undefined,
   setBannerVisible: React.Dispatch<boolean>
 }
 
@@ -12,6 +13,7 @@ interface BannerState {
 
 const useGetBannerState = ({
   nominationsLength,
+  uid,
   setBannerVisible,
 }: useGetBannerStateProps): BannerState => {
   const [bannerState, setBannerState] = useState<BannerState>({
@@ -23,7 +25,7 @@ const useGetBannerState = ({
     if (nominationsLength === 5) {
       setBannerVisible(true);
       setBannerState({ type: 'info', message: 'You have nominated 5 items.' });
-    } if (nominationsLength > 5) {
+    } else if (nominationsLength > 5) {
       setBannerVisible(true);
       setBannerState({
         type: 'warning',
@@ -32,6 +34,16 @@ const useGetBannerState = ({
       });
     }
   }, [nominationsLength, setBannerVisible]);
+
+  useEffect(() => {
+    if (uid === undefined) {
+      setBannerVisible(true);
+      setBannerState({
+        type: 'warning',
+        message: 'Warning: Sign in to save your nominations, and add to the Global Counter!',
+      });
+    }
+  }, []);
 
   return bannerState;
 };

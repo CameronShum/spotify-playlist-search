@@ -82,10 +82,9 @@ const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
           };
         });
 
-        dispatch({ type: 'login', payload: firebaseNominations });
+        dispatch({ type: 'signIn', payload: firebaseNominations });
       }
     }
-
     if (uid) {
       getUserNominations();
     }

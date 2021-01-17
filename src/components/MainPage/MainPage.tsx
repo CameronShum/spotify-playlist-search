@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
+import firebase from 'firebase';
 import {
-  Banner, ListBox, NominationsRow, SearchBar, SearchResultRow, SignInButton,
+  Banner, GlobalNominationsRow, ListBox, NominationsRow, SearchBar, SearchResultRow, SignInButton,
 } from 'components';
 import { useGetBannerState, useOmdbApi } from 'hooks';
 import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
-import { GlobalNominationsRow } from 'components/ListRows';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,9 +13,11 @@ const MainPage = () => {
   const [bannerVisible, setBannerVisible] = useState(false);
   const { nominations, globalNominations } = useFirebaseState();
   const searchResults = useOmdbApi({ searchTerm, type: searchType });
+  const uid = firebase.auth().currentUser?.uid;
   const bannerState = useGetBannerState({
     nominationsLength:
     Object.keys(nominations).filter((key) => nominations[key].nominated).length,
+    uid,
     setBannerVisible,
   });
 

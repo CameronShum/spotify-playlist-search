@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import firebase from 'firebase';
-import { useUidDispatch } from './FirebaseProvider';
+import { useFirebaseDispatch, useUidDispatch } from './FirebaseProvider';
 
 const SignInButton = () => {
   const [uid, setUid] = useState('');
-  const dispatch = useUidDispatch();
+  const dispatchUid = useUidDispatch();
+  const dispatchNominations = useFirebaseDispatch();
 
   const handleSignIn = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -13,7 +14,7 @@ const SignInButton = () => {
       .signInWithPopup(provider)
       .then((result) => {
         if (result.user) {
-          dispatch(result.user.uid);
+          dispatchUid(result.user.uid);
           setUid(result.user.uid || 'Signed In');
         }
       });
@@ -21,8 +22,9 @@ const SignInButton = () => {
 
   const handleSignOut = () => {
     firebase.auth().signOut();
-    dispatch('');
+    dispatchUid('');
     setUid('');
+    dispatchNominations({ type: 'signOut' });
   };
 
   return (
