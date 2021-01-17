@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import firebase from 'firebase/app';
 import {
-  Banner, GlobalNominationsRow, ListBox, NominationsRow, SearchBar, SearchResultRow, SignInButton,
+  Banner, GlobalNominationsBox, ListBox, NominationsBox, SearchBar, SearchResultRow, SignInButton,
 } from 'components';
 import { useGetBannerState, useOmdbApi } from 'hooks';
 import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
@@ -15,7 +15,7 @@ const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType, setSearchType] = useState<'Search' | 'Id'>('Search');
   const [bannerVisible, setBannerVisible] = useState(false);
-  const { nominations, globalNominations } = useFirebaseState();
+  const { nominations } = useFirebaseState();
   const { res: searchResults, err } = useOmdbApi({ searchTerm, type: searchType });
   const uid = firebase.auth().currentUser?.uid;
   const bannerState = useGetBannerState({
@@ -57,33 +57,9 @@ const MainPage = () => {
           errorMessage={`${err} Try clicking on Type: ${searchType} to switch search types.`}
         />
         <FlexRow>
-          <ListBox
-            titleText="Nominations"
-            rows={Object.keys(nominations).map((key) => (
-              nominations[key].nominated && (
-              <NominationsRow
-                key={key}
-                title={nominations[key].title}
-                year={nominations[key].year}
-                imdbId={key}
-              />
-              )))}
-          />
+          <NominationsBox />
           <Seperator />
-          <ListBox
-            titleText="Global Nominations"
-            rows={Object.keys(globalNominations)
-              .filter((key) => globalNominations[key].count !== 0)
-              .sort((key1, key2) => globalNominations[key2].count - globalNominations[key1].count)
-              .map((key) => (
-                <GlobalNominationsRow
-                  key={key}
-                  title={globalNominations[key].title}
-                  year={globalNominations[key].year}
-                  count={globalNominations[key].count}
-                />
-              ))}
-          />
+          <GlobalNominationsBox />
         </FlexRow>
       </ComponnentsContainer>
     </Container>
