@@ -36,8 +36,7 @@ export default React.memo(ListBox,
 
 const Container = styled.div`
   flex: 1;
-  min-height: 150px;
-  max-height: 300px;
+  height: 300px;
   margin-top: 50px;
   overflow-y: auto;
   overflow-x: hidden;
