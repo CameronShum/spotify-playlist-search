@@ -109,8 +109,6 @@ const Seperator = styled.div`
 `;
 
 const Title = styled.div`
-  position: sticky;
-  top: 0px;
   padding-bottom: 20px;
   font-size: 48px;
 `;

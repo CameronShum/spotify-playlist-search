@@ -37,7 +37,11 @@ const useOmdbApi = ({
         });
 
         if (getRequest.data.Response === 'True') {
-          setRes(type === 'Search' ? getRequest.data.Search : [getRequest.data]);
+          if (type === 'Search') {
+            setRes(getRequest.data.Search);
+          } else if (getRequest.data.Type === 'movie') {
+            setRes([getRequest.data]);
+          }
         }
       }());
     } else {

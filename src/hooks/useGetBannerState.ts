@@ -43,7 +43,7 @@ const useGetBannerState = ({
         message: 'Warning: Sign in to save your nominations, and add to the Global Counter!',
       });
     }
-  }, []);
+  }, [uid]);
 
   return bannerState;
 };
