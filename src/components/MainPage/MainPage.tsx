@@ -5,12 +5,13 @@ import {
 } from 'components';
 import { useGetBannerState, useOmdbApi } from 'hooks';
 import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
+import { GlobalNominationsRow } from 'components/ListRows';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchType, setSearchType] = useState<'Search' | 'Id'>('Search');
   const [bannerVisible, setBannerVisible] = useState(false);
-  const nominations = useFirebaseState();
+  const { nominations, globalNominations } = useFirebaseState();
   const searchResults = useOmdbApi({ searchTerm, type: searchType });
   const bannerState = useGetBannerState({
     nominationsLength:
@@ -64,15 +65,14 @@ const MainPage = () => {
           <Seperator />
           <ListBox
             titleText="Global Nominations"
-            rows={Object.keys(nominations).map((key) => (
-              nominations[key].nominated && (
-              <NominationsRow
+            rows={Object.keys(globalNominations).map((key) => (
+              <GlobalNominationsRow
                 key={key}
-                title={nominations[key].title}
-                year={nominations[key].year}
-                imdbId={key}
+                title={globalNominations[key].title}
+                year={globalNominations[key].year}
+                count={globalNominations[key].count}
               />
-              )))}
+            ))}
           />
         </FlexRow>
       </ComponnentsContainer>
@@ -97,8 +97,6 @@ const ComponnentsContainer = styled.div`
 const FlexRow = styled.div`
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: space-evenly;
 `;
 
 const Seperator = styled.div`

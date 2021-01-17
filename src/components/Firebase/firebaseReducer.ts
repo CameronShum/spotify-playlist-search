@@ -1,7 +1,12 @@
 import firebase from 'firebase';
-import Nominations from 'types/nominations.types';
+import GlobalNominations from 'types/GlobalNominations.types';
+import Nominations from 'types/Nominations.types';
 
-type State = Nominations
+type State = {
+  nominations: Nominations,
+  globalNominations: GlobalNominations
+}
+
 type Action = {
   type: 'nominate',
   payload: {
@@ -17,6 +22,9 @@ type Action = {
 } | {
   type: 'login',
   payload: Nominations
+} | {
+  type: 'initGlobalNominations',
+  payload: GlobalNominations
 }
 
 const firebaseReducer = (state: State, action: Action): State => {
@@ -24,6 +32,17 @@ const firebaseReducer = (state: State, action: Action): State => {
     case 'nominate': {
       const { imdbId, title, year } = action.payload;
       const uid = firebase.auth().currentUser?.uid;
+      const nextState = {
+        ...state,
+        nominations: {
+          ...state.nominations,
+          [imdbId]: {
+            title,
+            year,
+            nominated: true,
+          },
+        },
+      };
 
       if (uid) {
         const updates = {
@@ -42,21 +61,32 @@ const firebaseReducer = (state: State, action: Action): State => {
               firebase.database().ref().update(updates);
             },
           );
+        nextState.globalNominations = {
+          ...state.globalNominations,
+          [imdbId]: {
+            title,
+            year,
+            count: (state.globalNominations[imdbId]?.count || 0) + 1,
+          },
+        };
       }
 
-      return {
-        ...state,
-        [imdbId]: {
-          title,
-          year,
-          nominated: true,
-        },
-      };
+      return nextState;
     }
 
     case 'remove': {
       const { imdbId } = action.payload;
       const uid = firebase.auth().currentUser?.uid;
+      const nextState = {
+        ...state,
+        nominations: {
+          ...state.nominations,
+          [imdbId]: {
+            ...state.nominations[imdbId],
+            nominated: false,
+          },
+        },
+      };
 
       if (uid) {
         const updates: {[s: string]: any} = {
@@ -70,20 +100,35 @@ const firebaseReducer = (state: State, action: Action): State => {
               firebase.database().ref().update(updates);
             },
           );
+
+        nextState.globalNominations = {
+          ...state.globalNominations,
+          [imdbId]: {
+            ...state.globalNominations[imdbId],
+            count: state.globalNominations[imdbId].count - 1,
+          },
+        };
       }
-      return {
-        ...state,
-        [imdbId]: {
-          ...state[imdbId],
-          nominated: false,
-        },
-      };
+      return nextState;
     }
 
     case 'login': {
       const { payload } = action;
       return {
-        ...payload,
+        ...state,
+        nominations: {
+          ...payload,
+        },
+      };
+    }
+
+    case 'initGlobalNominations': {
+      const { payload } = action;
+      return {
+        ...state,
+        globalNominations: {
+          ...payload,
+        },
       };
     }
 

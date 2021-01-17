@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 import { TrashIcon } from 'icons';
 import { useFirebaseDispatch } from 'components/Firebase/FirebaseProvider';
 

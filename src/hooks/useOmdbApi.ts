@@ -1,21 +1,16 @@
 import { useState, useEffect } from 'react';
-// import styled from 'styled-components';
 import axios from 'axios';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-// type nominations = {[s: string]: {id: string, name: string}}
-
 interface useOmdbApiProps {
   searchTerm: string,
   type: 'Id' | 'Search',
-  // nominations: nominations,
-  // setNominations: React.Dispatch<nominations>
 }
 
 const useOmdbApi = ({
-  searchTerm, type, // nominations, setNominations,
+  searchTerm, type,
 }: useOmdbApiProps): {Title: string, Year: string, imdbID: string}[] => {
   const [res, setRes] = useState<any>([]);
 

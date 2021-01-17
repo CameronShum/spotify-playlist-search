@@ -1,4 +1,4 @@
-interface nominations {
+interface Nominations {
   [s: string]: {
     title: string,
     year: string,
@@ -6,4 +6,4 @@ interface nominations {
   }
 }
 
-export default nominations;
+export default Nominations;

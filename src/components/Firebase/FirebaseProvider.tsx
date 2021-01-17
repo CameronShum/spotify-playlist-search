@@ -2,7 +2,8 @@ import React, { useEffect, useReducer, useState } from 'react';
 import firebase from 'firebase';
 import 'firebase/database';
 import dotenv from 'dotenv';
-import Nominations from 'types/nominations.types';
+import Nominations from 'types/Nominations.types';
+import GlobalNominations from 'types/GlobalNominations.types';
 import firebaseReducer, { Action, State } from './firebaseReducer';
 
 dotenv.config();
@@ -31,16 +32,44 @@ const UidDispatchContext = React.createContext<React.Dispatch<string> | undefine
 
 const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
   const [uid, setUid] = useState('');
-  const [state, dispatch] = useReducer(firebaseReducer, {});
+  const [state, dispatch] = useReducer(firebaseReducer,
+    { nominations: {}, globalNominations: {} });
 
   useEffect(() => {
-    async function login() {
+    async function getGlobalNominations() {
+      const globalNominations: GlobalNominations = {};
+      const globalNominationCounts = (await firebase.database().ref().child('globalNominations').once('value')).val();
+
+      if (globalNominationCounts) {
+        const nominations = Object.keys(globalNominationCounts).map((key) => (
+          firebase.database().ref().child(`items/${key}`).once('value')
+        ));
+        const fullfilledNominations = await Promise.all(nominations);
+
+        fullfilledNominations.forEach((snapshot) => {
+          const nomination = snapshot.val();
+          globalNominations[nomination.imdbId] = {
+            title: nomination.title,
+            year: nomination.year,
+            count: globalNominationCounts[nomination.imdbId],
+          };
+        });
+      }
+
+      dispatch({ type: 'initGlobalNominations', payload: globalNominations });
+    }
+
+    getGlobalNominations();
+  }, []);
+
+  useEffect(() => {
+    async function getUserNominations() {
       const firebaseNominations: Nominations = {};
 
-      const userData = await firebase.database().ref().child(`users/${uid}`).once('value');
+      const userData = (await firebase.database().ref().child(`users/${uid}`).once('value')).val();
 
-      if (userData.val()) {
-        const items = Object.keys(userData.val())
+      if (userData) {
+        const items = Object.keys(userData)
           .map((key) => firebase.database().ref().child(`items/${key}`).once('value'));
         const fullfilledItems = await Promise.all(items);
 
@@ -58,7 +87,7 @@ const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
     }
 
     if (uid) {
-      login();
+      getUserNominations();
     }
   }, [uid]);
 
