@@ -33,7 +33,9 @@ const Banner = ({ type, message, setBannerVisible }: BannerProps) => (
     background={TYPE_TO_COLOR[type].background}
     textColor={TYPE_TO_COLOR[type].text}
   >
-    {message}
+    <TextContainer>
+      {message}
+    </TextContainer>
     <CloseContainer
       background={TYPE_TO_COLOR[type].background}
       textColor={TYPE_TO_COLOR[type].text}
@@ -54,7 +56,7 @@ interface ContainerProps {
 const CloseContainer = styled.div<ContainerProps>`
   width: 16px;
   height: 16px;
-  margin-left: 20px;
+  margin-left: 0px;
   border-radius: 100%;
   cursor: pointer;
   background-color: ${(props) => props.textColor};
@@ -86,6 +88,12 @@ const Container = styled.div<ContainerProps>`
   z-index: 2;
 
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
+`;
+
+const TextContainer = styled.div`
+  flex: 1;
+  text-align: center;
 `;
