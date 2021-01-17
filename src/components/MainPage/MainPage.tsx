@@ -69,7 +69,7 @@ const MainPage = () => {
             titleText="Global Nominations"
             rows={Object.keys(globalNominations)
               .filter((key) => globalNominations[key].count !== 0)
-              .sort((key1, key2) => globalNominations[key1].count - globalNominations[key2].count)
+              .sort((key1, key2) => globalNominations[key2].count - globalNominations[key1].count)
               .map((key) => (
                 <GlobalNominationsRow
                   key={key}
