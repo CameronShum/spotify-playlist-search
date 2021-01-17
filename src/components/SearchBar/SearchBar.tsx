@@ -24,7 +24,7 @@ const SearchBar = ({
     <SearchInput
       placeholder={searchType === 'Id'
         ? 'Enter IMDb movie ID, ie. "tt3783958"'
-        : 'Search for a movie, ie. "La La land"'}
+        : 'Search for a movie, ie. "La La Land"'}
       onChange={(e) => setSearchTerm(e.target.value)}
       value={searchTerm}
     />
