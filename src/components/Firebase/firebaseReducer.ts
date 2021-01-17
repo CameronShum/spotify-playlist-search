@@ -59,7 +59,7 @@ const firebaseReducer = (state: State, action: Action): State => {
         firebase.database().ref().child(`globalNominations/${imdbId}`).once('value')
           .then(
             (snapshot) => {
-              updates[`globalNominations/${imdbId}`] = snapshot.val() || 0 + 1;
+              updates[`globalNominations/${imdbId}`] = (snapshot.val() || 0) + 1;
               firebase.database().ref().update(updates);
             },
           );
@@ -98,7 +98,7 @@ const firebaseReducer = (state: State, action: Action): State => {
         firebase.database().ref().child(`globalNominations/${imdbId}`).once('value')
           .then(
             (snapshot) => {
-              updates[`globalNominations/${imdbId}`] = snapshot.val() - 1;
+              updates[`globalNominations/${imdbId}`] = (snapshot.val() || 1) - 1;
               firebase.database().ref().update(updates);
             },
           );
@@ -107,7 +107,7 @@ const firebaseReducer = (state: State, action: Action): State => {
           ...state.globalNominations,
           [imdbId]: {
             ...state.globalNominations[imdbId],
-            count: state.globalNominations[imdbId].count - 1,
+            count: (state.globalNominations[imdbId].count || 1) - 1,
           },
         };
       }
