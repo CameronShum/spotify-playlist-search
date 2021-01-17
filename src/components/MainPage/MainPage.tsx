@@ -65,14 +65,17 @@ const MainPage = () => {
           <Seperator />
           <ListBox
             titleText="Global Nominations"
-            rows={Object.keys(globalNominations).map((key) => (
-              <GlobalNominationsRow
-                key={key}
-                title={globalNominations[key].title}
-                year={globalNominations[key].year}
-                count={globalNominations[key].count}
-              />
-            ))}
+            rows={Object.keys(globalNominations)
+              .filter((key) => globalNominations[key].count !== 0)
+              .sort((key1, key2) => globalNominations[key1].count - globalNominations[key2].count)
+              .map((key) => (
+                <GlobalNominationsRow
+                  key={key}
+                  title={globalNominations[key].title}
+                  year={globalNominations[key].year}
+                  count={globalNominations[key].count}
+                />
+              ))}
           />
         </FlexRow>
       </ComponnentsContainer>
