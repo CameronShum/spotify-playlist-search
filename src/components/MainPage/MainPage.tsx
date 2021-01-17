@@ -16,7 +16,7 @@ const MainPage = () => {
   const [searchType, setSearchType] = useState<'Search' | 'Id'>('Search');
   const [bannerVisible, setBannerVisible] = useState(false);
   const { nominations, globalNominations } = useFirebaseState();
-  const searchResults = useOmdbApi({ searchTerm, type: searchType });
+  const { res: searchResults, err } = useOmdbApi({ searchTerm, type: searchType });
   const uid = firebase.auth().currentUser?.uid;
   const bannerState = useGetBannerState({
     nominationsLength:
@@ -54,6 +54,7 @@ const MainPage = () => {
               isNominated={nominations[result.imdbID]?.nominated}
             />
           ))}
+          errorMessage={`${err} Try clicking on Type: ${searchType} to switch search types.`}
         />
         <FlexRow>
           <ListBox

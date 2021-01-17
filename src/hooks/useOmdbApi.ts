@@ -9,6 +9,11 @@ interface useOmdbApiProps {
   type: 'Id' | 'Search',
 }
 
+interface useOmdbApiReturn {
+  res: {Title: string, Year: string, imdbID: string}[],
+  err: string,
+}
+
 /**
  * Searches Omdb's Api for a search term
  * @param searchTerm the term to search for
@@ -16,8 +21,9 @@ interface useOmdbApiProps {
  */
 const useOmdbApi = ({
   searchTerm, type,
-}: useOmdbApiProps): {Title: string, Year: string, imdbID: string}[] => {
+}: useOmdbApiProps): useOmdbApiReturn => {
   const [res, setRes] = useState<any>([]);
+  const [err, setErr] = useState('');
 
   useEffect(() => {
     if (searchTerm !== '') {
@@ -47,6 +53,9 @@ const useOmdbApi = ({
           } else if (getRequest.data.Type === 'movie') {
             setRes([getRequest.data]);
           }
+        } else {
+          setRes([]);
+          setErr(getRequest.data.Error);
         }
       }());
     } else {
@@ -54,7 +63,7 @@ const useOmdbApi = ({
     }
   }, [searchTerm, type]);
 
-  return res;
+  return { res, err };
 };
 
 export default useOmdbApi;

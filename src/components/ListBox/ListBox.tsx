@@ -4,6 +4,7 @@ import styled from 'styled-components/macro';
 
 interface ListBoxProps {
   titleText: string,
+  errorMessage?: string,
   rows: React.ReactNode[],
 }
 
@@ -11,7 +12,7 @@ interface ListBoxProps {
  *  @param titleText string for the title of the container
  *  @param rows an array of React.ReactNode
  */
-const ListBox = ({ titleText, rows }: ListBoxProps) => {
+const ListBox = ({ titleText, errorMessage = '', rows }: ListBoxProps) => {
   const [rowAmount, setRowAmount] = useState(5);
 
   const handleExpandRows = () => {
@@ -25,6 +26,9 @@ const ListBox = ({ titleText, rows }: ListBoxProps) => {
       </Title>
       <RowContainer>
         {rows.filter((row: any, index: number) => index < rowAmount)}
+        <ErrorMessage>
+          {rows.length === 0 && errorMessage}
+        </ErrorMessage>
       </RowContainer>
       {rows.length > rowAmount && <SeeMore onClick={handleExpandRows}>See More</SeeMore>}
     </Container>
@@ -47,6 +51,12 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const ErrorMessage = styled.div`
+  padding: 10px 0 10px 10px;
+  font-size: 24px;
+  background-color: white;
 `;
 
 const RowContainer = styled.div`
