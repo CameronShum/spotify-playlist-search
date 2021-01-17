@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import { TrashIcon } from 'icons';
 import { useFirebaseDispatch } from 'components/Firebase/FirebaseProvider';
@@ -18,26 +18,44 @@ interface NominationsRowProp {
 const NominationsRow = ({
   title, year, imdbId,
 }: NominationsRowProp) => {
+  const [isSaved, setIsSaved] = useState(false);
+
   const dispatch = useFirebaseDispatch();
   const removeNomination = () => {
     dispatch({ type: 'remove', payload: { imdbId } });
   };
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsSaved(true);
+    }, 500);
+  }, []);
 
   return (
     <RowContainer>
       <div>
         {`${title} (${year})`}
       </div>
-      <ImageContainer
-        onClick={removeNomination}
-      >
-        <TrashIcon />
-      </ImageContainer>
+      <FlexRow>
+        <SavedText>
+          {isSaved ? 'saved' : 'saving...'}
+        </SavedText>
+        <ImageContainer
+          onClick={removeNomination}
+        >
+          <TrashIcon />
+        </ImageContainer>
+      </FlexRow>
     </RowContainer>
   );
 };
 
 export default React.memo(NominationsRow);
+
+const FlexRow = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
 const ImageContainer = styled.div`
   cursor: pointer;
@@ -59,4 +77,11 @@ const RowContainer = styled.div`
   @media (max-width: 600px) {
     font-size: 16px;
   }
+`;
+
+const SavedText = styled.div`
+  margin-right: 20px;
+  font-size: 14px;
+  text-decoration: underline;
+  opacity: 0.4;
 `;
