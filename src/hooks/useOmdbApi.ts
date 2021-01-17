@@ -32,7 +32,7 @@ const useOmdbApi = ({
         };
       }
       (async function getApiResults() {
-        const getRequest = await axios.get('http://www.omdbapi.com', {
+        const getRequest = await axios.get('https://www.omdbapi.com', {
           params,
         });
 
