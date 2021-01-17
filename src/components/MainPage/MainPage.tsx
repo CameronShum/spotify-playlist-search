@@ -44,7 +44,7 @@ const MainPage = () => {
           setSearchType={setSearchType}
         />
         <ListBox
-          titleText={searchTerm && searchResults.length !== 0 ? `Results for "${searchTerm}"` : 'No results found.'}
+          titleText={searchTerm ? `Results for "${searchTerm}"` : 'Search Results'}
           rows={searchResults.map((result) => (
             <SearchResultRow
               key={result.imdbID}
