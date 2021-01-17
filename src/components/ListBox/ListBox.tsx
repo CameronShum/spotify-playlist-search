@@ -26,10 +26,12 @@ const ListBox = ({ titleText, errorMessage = '', rows }: ListBoxProps) => {
       </Title>
       <RowContainer>
         {rows.filter((row: any, index: number) => index < rowAmount)}
-        <ErrorMessage>
-          {rows.length === 0 && errorMessage}
-        </ErrorMessage>
       </RowContainer>
+      {rows.length === 0 && (
+        <ErrorMessage>
+          {errorMessage}
+        </ErrorMessage>
+      )}
       {rows.length > rowAmount && <SeeMore onClick={handleExpandRows}>See More</SeeMore>}
     </Container>
   );
