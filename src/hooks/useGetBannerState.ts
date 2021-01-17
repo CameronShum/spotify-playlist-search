@@ -40,7 +40,7 @@ const useGetBannerState = ({
       setBannerVisible(true);
       setBannerState({
         type: 'warning',
-        message: 'Warning: Sign in to save your nominations, and add to the Global Counter!',
+        message: 'Warning: Sign in to save your nominations, and add to the Global Nominations Counter!',
       });
     }
   }, [uid]);
