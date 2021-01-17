@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import {
   Banner, GlobalNominationsRow, ListBox, NominationsRow, SearchBar, SearchResultRow, SignInButton,
 } from 'components';

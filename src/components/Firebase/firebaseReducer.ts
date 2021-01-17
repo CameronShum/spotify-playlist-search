@@ -1,4 +1,4 @@
-import firebase from 'firebase';
+import firebase from 'firebase/app';
 import GlobalNominations from 'types/GlobalNominations.types';
 import Nominations from 'types/Nominations.types';
 
