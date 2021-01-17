@@ -1,9 +1,14 @@
 import React from 'react';
+import firebase from 'firebase';
 import { ListBox, NominationsRow } from 'components';
 import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
 
+/**
+ * ListBox component with NominationsRow
+ */
 const NominationsBox = () => {
   const { nominations } = useFirebaseState();
+  const uid = firebase.auth().currentUser?.uid;
 
   return (
     <ListBox
@@ -15,6 +20,7 @@ const NominationsBox = () => {
           title={nominations[key].title}
           year={nominations[key].year}
           imdbId={key}
+          signedIn={uid !== undefined}
         />
         )))}
     />

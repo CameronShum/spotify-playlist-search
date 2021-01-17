@@ -7,6 +7,7 @@ interface NominationsRowProp {
   title: string,
   year: string,
   imdbId: string,
+  signedIn: boolean,
 }
 
 /**
@@ -16,10 +17,9 @@ interface NominationsRowProp {
  * @param imdbId Unique imdbId for the movie
  */
 const NominationsRow = ({
-  title, year, imdbId,
+  title, year, imdbId, signedIn,
 }: NominationsRowProp) => {
   const [isSaved, setIsSaved] = useState(false);
-
   const dispatch = useFirebaseDispatch();
   const removeNomination = () => {
     dispatch({ type: 'remove', payload: { imdbId } });
@@ -37,9 +37,11 @@ const NominationsRow = ({
         {`${title} (${year})`}
       </div>
       <FlexRow>
+        {signedIn && (
         <SavedText>
           {isSaved ? 'saved' : 'saving...'}
         </SavedText>
+        )}
         <ImageContainer
           onClick={removeNomination}
         >

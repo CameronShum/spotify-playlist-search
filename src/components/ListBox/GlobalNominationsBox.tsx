@@ -2,6 +2,9 @@ import React from 'react';
 import { ListBox, GlobalNominationsRow } from 'components';
 import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
 
+/**
+ * ListBox component with GlobalNominationsRow
+ */
 const GlobalNominationsBox = () => {
   const { globalNominations } = useFirebaseState();
 
