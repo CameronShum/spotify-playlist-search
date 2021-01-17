@@ -41,9 +41,11 @@ const FirebaseProvider = ({ children }: FirebaseProviderProps) => {
       const globalNominationCounts = (await firebase.database().ref().child('globalNominations').once('value')).val();
 
       if (globalNominationCounts) {
-        const nominations = Object.keys(globalNominationCounts).map((key) => (
-          firebase.database().ref().child(`items/${key}`).once('value')
-        ));
+        const nominations = Object.keys(globalNominationCounts)
+          .filter((key) => globalNominationCounts[key] !== 0)
+          .map((key) => (
+            firebase.database().ref().child(`items/${key}`).once('value')
+          ));
         const fullfilledNominations = await Promise.all(nominations);
 
         fullfilledNominations.forEach((snapshot) => {
