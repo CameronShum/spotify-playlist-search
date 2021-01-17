@@ -46,4 +46,10 @@ const ButtonContainer = styled.div`
 
   background-color: #00897B;
   color: white;
+
+  @media (max-width: 600px) {
+    top: 5px;
+    right: 5px;
+    padding: 5px 20px;
+  }
 `;

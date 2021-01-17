@@ -60,6 +60,10 @@ const RowContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 
 const NominateContainer = styled.div<{isNominated: boolean}>`

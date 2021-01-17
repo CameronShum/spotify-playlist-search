@@ -65,6 +65,10 @@ const SearchInput = styled.input`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
 
 const SearchTypeContainer = styled.div`
@@ -82,4 +86,8 @@ const SearchTypeContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
+  @media (max-width: 600px) {
+    font-size: 16px;
+  }
 `;
