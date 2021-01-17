@@ -74,12 +74,15 @@ const CloseContainer = styled.div<ContainerProps>`
 `;
 
 const Container = styled.div<ContainerProps>`
+  position: sticky;
+  top: 0px;
   width: 100%;
   padding: 7px 0px;
 
   background-color: ${(props) => props.background};
   color: ${(props) => props.textColor};
   font-size: 18px;
+  z-index: 2;
 
   display: flex;
   align-items: center;
