@@ -1,70 +1,44 @@
-# Getting Started with Create React App
+# The Shoppies
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Design
+The design for the web app is done in [Figma](https://www.figma.com/file/9Ov5HPPh6w6iuFjbSLPNHB/Shopify-Front-end-Challenge-2021). 
 
-## Available Scripts
+The design is made to be simple to be intuitive and unrestrictive to the user. The search bar is at the top to promote the apps primary functionality. It is also designed with mobile in mind, to allow for a near seamless transition. When possible a word is replaced with an icon, this allows the app to be more user friendly, by not relying on a person's native language.
 
-In the project directory, you can run:
+All buttons and icons are designed custom. All the components are built custom as well. 
 
-### `yarn start`
+## Performance
+To get better performance the app goes through a few perfomance optimizations.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Memoization
+Many components use `React.memo()` to prevent rerenders when a component gets the same prop.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Lifting the state
+To perform further optimizations the state of the nominations was lifted. The state changed from a `useState()` in the main component to a context provider with a dispatch.
 
-### `yarn test`
+### Why lift the state?
+The component `<ListBox />` handles the logic of rendering each box. It is passed the rows to render as a prop. If the nominations object is in the Main component, each row must know of all the other rows to perform a state update (either nomination or removal). An example of this is:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+``` JS
+const setNominations = () => {
+  setNominations({
+    ...prevNominations,
+    ...newNominations,
+  })
+}
 
-### `yarn build`
+// Later in the code
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<ListRow setNominations={setNominations}>
+```
+In this example, setNominations will change everytime the prevNominations state is updated. This will trigger a rerender of all the other rows. By subscribing to the changes we can do this instead.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```JS
+const ListRow = ({imdbId}) => {
+  const dispatch = useFirebaseDispatch();
+  // other logic
+  dispatch({type: 'nominate', payload: {imdbId}})
+}
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This makes the reducer handle the logic (and the reducer is aware of the previous state), and each individual `<ListRow />` will have props that don't change on a action; preventing rerenders.
