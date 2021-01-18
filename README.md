@@ -10,7 +10,7 @@ The design is made to be simple to be intuitive and unrestrictive to the user. T
 All buttons and icons are designed custom. All the components are built custom as well. 
 
 ## Performance
-To get better performance the app goes through a few perfomance optimizations.
+To get better performance the app goes through a few perfomance optimizations. The rerender time for adding a component was reduced from 30ms per item to ~10ms per item, measured with the React DevTools Flamegraph. 
 
 ### Memoization
 Many components use `React.memo()` to prevent rerenders when a component gets the same prop.
