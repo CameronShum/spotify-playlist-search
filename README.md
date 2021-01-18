@@ -1,5 +1,7 @@
 # The Shoppies
 
+https://theshoppies.cameronshum.com/
+
 ## Design
 The design for the web app is done in [Figma](https://www.figma.com/file/9Ov5HPPh6w6iuFjbSLPNHB/Shopify-Front-end-Challenge-2021). 
 
@@ -19,26 +21,60 @@ To perform further optimizations the state of the nominations was lifted. The st
 ### Why lift the state?
 The component `<ListBox />` handles the logic of rendering each box. It is passed the rows to render as a prop. If the nominations object is in the Main component, each row must know of all the other rows to perform a state update (either nomination or removal). An example of this is:
 
-``` JS
-const setNominations = () => {
+```javascript
+const handleNominate = () => {
   setNominations({
     ...prevNominations,
-    ...newNominations,
-  })
+    ...newNominationsObject,
+  });
 }
 
 // Later in the code
 
-<ListRow setNominations={setNominations}>
+<ListRow setNomination={handleNominate}>
 ```
 In this example, setNominations will change everytime the prevNominations state is updated. This will trigger a rerender of all the other rows. By subscribing to the changes we can do this instead.
 
-```JS
+```javascript
 const ListRow = ({imdbId}) => {
   const dispatch = useFirebaseDispatch();
   // other logic
-  dispatch({type: 'nominate', payload: {imdbId}})
+  dispatch({type: 'nominate', payload: {imdbId}});
 }
 ```
 
-This makes the reducer handle the logic (and the reducer is aware of the previous state), and each individual `<ListRow />` will have props that don't change on a action; preventing rerenders.
+This makes the reducer handle the logic (the reducer is aware of the previous state), and each individual `<ListRow />` will have props that don't change on an action; preventing rerenders.
+
+## Database Schema
+The database used in the app is Firebase Realtime Database. This allows for an easy authorization flow and a simple NoSql database.
+
+The database is structured like follows:
+
+```javascript
+{
+  globalNominations: {
+    [imdbId: string]: (count: number)
+    ...
+  },
+  items: {
+    [imdbId: string]: {
+      title:  (title: string),
+      imdbId: (imdbId: string),
+      year:   (year: string),
+    },
+    ...
+  },
+  users: {
+    [uid: string]: {
+      [imdbId: string]: true
+    }
+  }
+}
+```
+Any user, regardless of authentication state, can read from the globalNominations path, and items path. This is how globalNominations is populated on app start. 
+
+A user is only allowed to read and write to their own user uid. They may write to the globalNominations and they may also write to the items. This security is maintained with the firebase security rules.
+
+The items are abstracted away from globalNominations and users to prevent data duplication and allow for easier querying.
+
+imdbId is included in each item to allow for easier querying.  
