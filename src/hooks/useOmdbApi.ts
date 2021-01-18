@@ -10,7 +10,7 @@ interface useOmdbApiProps {
 }
 
 interface useOmdbApiReturn {
-  res: {Title: string, Year: string, imdbID: string}[],
+  res: {Title: string, Year: string, imdbID: string, Poster: string}[],
   err: string,
 }
 

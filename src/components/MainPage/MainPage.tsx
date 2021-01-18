@@ -51,6 +51,7 @@ const MainPage = () => {
               title={result.Title}
               year={result.Year}
               imdbId={result.imdbID}
+              poster={result.Poster}
               isNominated={nominations[result.imdbID]?.nominated}
             />
           ))}
