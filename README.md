@@ -10,7 +10,26 @@ The design is made to be simple to be intuitive and unrestrictive to the user. T
 All buttons and icons are designed custom. All the components are built custom as well. 
 
 ## Performance
-To get better performance the app goes through a few perfomance optimizations. The rerender time for adding a component was reduced from 30ms per item to ~10ms per item, measured with the React DevTools Flamegraph. 
+To get better performance the app goes through a few perfomance optimizations. The rerender time for adding a component was reduced from ~30ms average per item to ~15ms average per item, measured with the React DevTools Flamegraph. 
+
+<figure>
+  <img src="https://imgur.com/WtI4hMQ.png">
+  <figcaption>
+    <em>
+      React DevTools Flamegraph Comparison; Pre Optimization vs. Post Optimization
+    </em>
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://imgur.com/fMsvZyK.png">
+  <figcaption>
+    <em>
+      React DevTools Current Flamegraph
+    </em>
+  </figcaption>
+</figure>
+
 
 ### Memoization
 Many components use `React.memo()` to prevent rerenders when a component gets the same prop.
@@ -44,6 +63,35 @@ const ListRow = ({imdbId}) => {
 ```
 
 This makes the reducer handle the logic (the reducer is aware of the previous state), and each individual `<ListRow />` will have props that don't change on an action; preventing rerenders.
+
+### The Effect of Lifting the State
+
+<figure>
+  <img src="https://imgur.com/SYbPsUY.png">
+  <figcaption>
+    <em>
+      Prior to lifting the state; Nominating the 5th item
+    </em>
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://imgur.com/6ZfcPg1.png">
+  <figcaption>
+    <em>
+      Post lifting the state; Nominating the 5th item
+    </em>
+  </figcaption>
+</figure>
+
+<figure>
+  <img src="https://imgur.com/Sccy3Wm.png">
+  <figcaption>
+    <em>
+      Current Web App; Nominating the 5th item
+    </em>
+  </figcaption>
+</figure>
 
 ## Database Schema
 The database used in the app is Firebase Realtime Database. This allows for an easy authorization flow and a simple NoSql database.
