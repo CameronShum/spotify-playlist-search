@@ -10,35 +10,35 @@ The design is made to be simple to be intuitive and unrestrictive to the user. T
 All buttons and icons are designed custom. All the components are built custom as well. 
 
 ## Performance
-To get better performance the app goes through a few perfomance optimizations. The rerender time for adding a component was reduced from ~30ms average per item to ~15ms average per item, measured with the React DevTools Flamegraph. The current web app has additional rerenders for better user feedback, although many of these rerenders are <5ms. 
+To get better performance the app goes through a few perfomance optimizations. The rerender time for nominating a movie was reduced from ~30ms average per movie to ~15ms average per movie, measured with the React DevTools Flamegraph. The current web app has additional rerenders for better user feedback, although many of these rerenders are <5ms. 
 
 <figure>
-  <img src="https://imgur.com/WtI4hMQ.png">
   <figcaption>
     <em>
       React DevTools Flamegraph Comparison; Pre Optimization vs. Post Optimization
     </em>
   </figcaption>
+  <img src="https://imgur.com/WtI4hMQ.png">
 </figure>
 
 <figure>
-  <img src="https://imgur.com/fMsvZyK.png">
   <figcaption>
     <em>
       React DevTools Current Flamegraph
     </em>
   </figcaption>
+  <img src="https://imgur.com/fMsvZyK.png">
 </figure>
 
 
 ### Memoization
-Many components use `React.memo()` to prevent rerenders when a component gets the same prop.
+Many components use `React.memo()`. This prevents rerenders when a component gets passed the same props.
 
 ### Lifting the state
-To perform further optimizations the state of the nominations was lifted. The state changed from a `useState()` in the main component to a context provider with a dispatch.
+To perform further optimizations, the state of the nominations was lifted. The nominations object changed from a `useState()` in `<MainPage />` to a context provider with a dispatch.
 
 ### Why lift the state?
-The component `<ListBox />` handles the logic of rendering each box. It is passed the rows to render as a prop. If the nominations object is in the Main component, each row must know of all the other rows to perform a state update (either nomination or removal). An example of this is:
+The component `<ListBox />` handles the logic for rendering each box. It is passed the rows to render as children. If the nominations object is in the Main component, each row must know of all the other rows to perform a state update (either nomination or removal). An example of this is:
 
 ```javascript
 const handleNominate = () => {
@@ -52,7 +52,7 @@ const handleNominate = () => {
 
 <ListRow setNomination={handleNominate}>
 ```
-In this example, setNominations will change everytime the prevNominations state is updated. This will trigger a rerender of all the other rows. By subscribing to the changes we can do this instead.
+In this example, setNominations will change every time the prevNominations state is updated. This will trigger a rerender of all the other rows because none of the previous functions will have the same memory address as the newly created function. There is no way to avoid this problem with state management in `<MainPage />`. If each component subscribes to the changes in the state, this can be done:
 
 ```javascript
 const ListRow = ({imdbId}) => {
@@ -61,40 +61,39 @@ const ListRow = ({imdbId}) => {
   dispatch({type: 'nominate', payload: {imdbId}});
 }
 ```
-
-This makes the reducer handle the logic (the reducer is aware of the previous state), and each individual `<ListRow />` will have props that don't change on an action; preventing rerenders.
+In this example, the state management is moved from the `<MainPage />` component to a reducer. The reducer handles the logic for creating the new state, and each individual `<ListRow />` will have props that only describe visual content. The `<ListRow />`s become pure components and have their rerenders prevented by `React.memo()`.
 
 ### The Effect of Lifting the State
 
 <figure>
-  <img src="https://imgur.com/SYbPsUY.png">
   <figcaption>
     <em>
       Prior to lifting the state; Nominating the 5th item
     </em>
   </figcaption>
+  <img src="https://imgur.com/SYbPsUY.png">
 </figure>
 
 In this image, all rows are rerendered causing the component to take 24.3ms to rerender completely. 
 
 <figure>
-  <img src="https://imgur.com/6ZfcPg1.png">
   <figcaption>
     <em>
       Post lifting the state; Nominating the 5th item
     </em>
   </figcaption>
+  <img src="https://imgur.com/6ZfcPg1.png">
 </figure>
 
-In the optimized app, only the needed rows are rerendered. The two ListBox components are reduced from 11.2ms to 5.2ms and 10.3ms to 4.3ms respectively. The side effect of introducing the provider is the provider also need to rerender which has a small amount of overhead.
+In the optimized app, only the needed rows are rerendered. The two ListBox components are reduced from 11.2ms to 5.2ms and 10.3ms to 4.3ms respectively. Here, additional rerenders are needed for the provider, this is a side effect of introducing the provider as a parent of `<MainPage />`. There is a small overhead (<1ms) to achieve double the speed in ListBox.
 
 <figure>
-  <img src="https://imgur.com/Sccy3Wm.png">
   <figcaption>
     <em>
       Current Web App; Nominating the 5th item
     </em>
   </figcaption>
+  <img src="https://imgur.com/Sccy3Wm.png">
 </figure>
 
 The performance of the current application is similar to that of the one above. 
@@ -127,11 +126,11 @@ The database is structured like follows:
 ```
 Any user, regardless of authentication state, can read from the globalNominations path, and items path. This is how globalNominations is populated on app start. 
 
-A user is only allowed to read and write to their own user uid. They may write to the globalNominations and they may also write to the items. This security is maintained with the firebase security rules.
+A user is only allowed to read and write to their own user uid. They may write to the globalNominations and they may also write to the items. This security is ensured by the firebase security rules.
 
-The items are abstracted away from globalNominations and users to prevent data duplication and allow for easier querying.
+The movies (called items in the database) are abstracted from globalNominations and users to prevent data duplication and allow for easier querying.
 
-imdbId is included in each item to allow for easier querying.  
+imdbId is also included in each item to allow for easier querying.  
 
 ## What's next
 - Tackling additional instances of unnecessary rerenders and building a React architecture that abstracts rerender optimization from the developer.
