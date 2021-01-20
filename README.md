@@ -5,12 +5,12 @@ https://theshoppies.cameronshum.com/
 ## Design
 The design for the web app is done in [Figma](https://www.figma.com/file/9Ov5HPPh6w6iuFjbSLPNHB/Shopify-Front-end-Challenge-2021). 
 
-The design is made to be simple to be intuitive and unrestrictive to the user. The search bar is at the top to promote the apps primary functionality. It is also designed with mobile in mind, to allow for a near seamless transition. When possible a word is replaced with an icon, this allows the app to be more user friendly, by not relying on a person's native language.
+The design is made to be simple, intuitive, and unrestrictive to the user. The search bar is at the top to promote the apps primary functionality. It is also designed with mobile in mind, to allow for a near seamless transition. When possible a word is replaced with an icon, this allows the app to be more user friendly, by not relying on a person's native language.
 
-All buttons and icons are designed custom. All the components are built custom as well. 
+All buttons and icons are designed by myself. All the components are built from scratch as well. 
 
 ## Performance
-To get better performance the app goes through a few perfomance optimizations. The rerender time for nominating a movie was reduced from ~30ms average per movie to ~15ms average per movie, measured with the React DevTools Flamegraph. The current web app has additional rerenders for better user feedback, although many of these rerenders are <5ms. 
+To get better performance the app goes through a few perfomance optimizations. The rerender time for nominating a movie was reduced from ~30ms per movie to ~15ms per movie, this is measured with the React DevTools Flamegraph. The current web app has additional rerenders for better user feedback, although many of these rerenders are <5ms. 
 
 <figure>
   <figcaption>
@@ -38,7 +38,7 @@ Many components use `React.memo()`. This prevents rerenders when a component get
 To perform further optimizations, the state of the nominations was lifted. The nominations object changed from a `useState()` in `<MainPage />` to a context provider with a dispatch.
 
 ### Why lift the state?
-The component `<ListBox />` handles the logic for rendering each box. It is passed the rows to render as children. If the nominations object is in the Main component, each row must know of all the other rows to perform a state update (either nomination or removal). An example of this is:
+The component `<ListBox />` handles the logic for rendering each box. It is passed the rows to render as children. If the nominations object is in the Main component, each row must know of the previous state to perform a state update (either nomination or removal). An example of this is:
 
 ```javascript
 const handleNominate = (nomination) => {
@@ -53,7 +53,9 @@ const handleNominate = (nomination) => {
   rows={nominations.map(nomination => <ListRow setNomination={() => handleNominate(nomination)} contents={nomination}/>)}
 />
 ```
-In this example, `setNomination` in `<ListRow />` will change every time the prevNominations state is updated. This will trigger a rerender of all the other rows because none of the previous `setNomination` will have the same memory address as the newly created `setNomination`. There is no way to avoid this problem with state management in `<MainPage />`. If each component subscribes to the changes in the state, this can be done:
+In this example, `setNomination` in `<ListRow />` will change every time the prevNominations state is updated. This will trigger a rerender of all the other rows because none of the previous `setNomination` will have the same memory address as the newly created `setNomination`. There is no way to avoid this problem with state management in `<MainPage />`. 
+
+An alternative to this is for each component to subscribe the context, with this approach the following code can be written.
 
 ```javascript
 const ListRow = ({contents}) => {
@@ -62,7 +64,7 @@ const ListRow = ({contents}) => {
   dispatch({type: 'nominate', payload: {...contents}});
 }
 ```
-In this example, the state management is moved from the `<MainPage />` component to a reducer. The reducer handles the logic for creating the new state, and each individual `<ListRow />` will be able to dispatch their own contents to the reducer. The `<ListRow />` has become a pure component and will have its rerender prevented by `React.memo()`. The props of ListRow are pure because they are literals; it no longer contains a changing function `setNomination`.
+In this example, the state management is moved from the `<MainPage />` component to a reducer. The reducer handles the logic for creating the new state, and each individual `<ListRow />` will be able to dispatch their own contents to the reducer; the `<ListRow />` doesn't need to know of the previous state. The `<ListRow />` has become a pure component and will have its rerender prevented by `React.memo()`. The props of ListRow are pure because they are literals; it no longer contains a changing function `setNomination`.
 
 ### The Effect of Lifting the State
 
@@ -75,7 +77,7 @@ In this example, the state management is moved from the `<MainPage />` component
   <img src="https://imgur.com/SYbPsUY.png">
 </figure>
 
-In this image, all rows are rerendered causing the component to take 24.3ms to rerender completely. 
+In this image, all rows are rerendered causing the app to take 24.3ms to rerender completely. The performance of the app will continuously decrease as more items are nominated because it will have to rerender n nominations.
 
 <figure>
   <figcaption>
@@ -86,7 +88,7 @@ In this image, all rows are rerendered causing the component to take 24.3ms to r
   <img src="https://imgur.com/6ZfcPg1.png">
 </figure>
 
-In the optimized app, only the needed rows are rerendered. The two ListBox components are reduced from 11.2ms to 5.2ms and 10.3ms to 4.3ms respectively. Here, additional rerenders are needed for the provider, this is a side effect of introducing the provider as a parent of `<MainPage />`. There is a small overhead (<1ms) to achieve double the speed in ListBox.
+In the optimized app, only the needed rows are rerendered. This approach also scales well, with each additional item there will only be a constant number of rerenders. The two ListBox components are reduced from 11.2ms to 5.2ms and 10.3ms to 4.3ms respectively. Here, additional rerenders are needed for the provider, this is a side effect of introducing the provider as a parent of `<MainPage />`. There is a small overhead (<1ms) to achieve double the speed in ListBox.
 
 <figure>
   <figcaption>
