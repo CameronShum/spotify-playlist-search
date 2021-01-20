@@ -53,7 +53,7 @@ const handleNominate = (nomination) => {
   rows={nominations.map(nomination => <ListRow setNomination={() => handleNominate(nomination)} contents={nomination}/>)}
 />
 ```
-In this example, setNomination in `<ListRow />` will change every time the prevNominations state is updated. This will trigger a rerender of all the other rows because none of the previous setNomination will have the same memory address as the newly created setNomination. There is no way to avoid this problem with state management in `<MainPage />`. If each component subscribes to the changes in the state, this can be done:
+In this example, `setNomination` in `<ListRow />` will change every time the prevNominations state is updated. This will trigger a rerender of all the other rows because none of the previous `setNomination` will have the same memory address as the newly created `setNomination`. There is no way to avoid this problem with state management in `<MainPage />`. If each component subscribes to the changes in the state, this can be done:
 
 ```javascript
 const ListRow = ({contents}) => {
@@ -62,7 +62,7 @@ const ListRow = ({contents}) => {
   dispatch({type: 'nominate', payload: {...contents}});
 }
 ```
-In this example, the state management is moved from the `<MainPage />` component to a reducer. The reducer handles the logic for creating the new state, and each individual `<ListRow />` will be able to dispatch their own contents to the reducer. The `<ListRow />` has become a pure component and will have its rerender prevented by `React.memo()`.
+In this example, the state management is moved from the `<MainPage />` component to a reducer. The reducer handles the logic for creating the new state, and each individual `<ListRow />` will be able to dispatch their own contents to the reducer. The `<ListRow />` has become a pure component and will have its rerender prevented by `React.memo()`. The props of ListRow are pure because they are literals; it no longer contains a changing function `setNomination`.
 
 ### The Effect of Lifting the State
 

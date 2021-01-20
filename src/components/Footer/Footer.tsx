@@ -11,7 +11,7 @@ const Footer = () => (
   </FooterContainer>
 );
 
-export default Footer;
+export default React.memo(Footer);
 
 const FooterContainer = styled.div`
   flex: 1;
