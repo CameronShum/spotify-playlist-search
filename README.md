@@ -41,28 +41,28 @@ To perform further optimizations, the state of the nominations was lifted. The n
 The component `<ListBox />` handles the logic for rendering each box. It is passed the rows to render as children. If the nominations object is in the Main component, each row must know of all the other rows to perform a state update (either nomination or removal). An example of this is:
 
 ```javascript
-const handleNominate = () => {
+const handleNominate = (nomination) => {
   setNominations({
     ...prevNominations,
-    ...newNominationsObject,
+    ...nomination,
   });
 }
 
 // Later in the code
 <ListBox 
-  rows={nominations.map(nomination => <ListRow setNomination={handleNominate} contents={nomination}/>)}
+  rows={nominations.map(nomination => <ListRow setNomination={() => handleNominate(nomination)} contents={nomination}/>)}
 />
 ```
-In this example, setNominations will change every time the prevNominations state is updated. This will trigger a rerender of all the other rows because none of the previous functions will have the same memory address as the newly created function. There is no way to avoid this problem with state management in `<MainPage />`. If each component subscribes to the changes in the state, this can be done:
+In this example, setNomination in `<ListRow />` will change every time the prevNominations state is updated. This will trigger a rerender of all the other rows because none of the previous setNomination will have the same memory address as the newly created setNomination. There is no way to avoid this problem with state management in `<MainPage />`. If each component subscribes to the changes in the state, this can be done:
 
 ```javascript
-const ListRow = ({imdbId}) => {
+const ListRow = ({contents}) => {
   const dispatch = useFirebaseDispatch();
   // other logic
-  dispatch({type: 'nominate', payload: {imdbId}});
+  dispatch({type: 'nominate', payload: {...contents}});
 }
 ```
-In this example, the state management is moved from the `<MainPage />` component to a reducer. The reducer handles the logic for creating the new state, and each individual `<ListRow />` will have props that only describe visual content. The `<ListRow />`s become pure components and have their rerenders prevented by `React.memo()`.
+In this example, the state management is moved from the `<MainPage />` component to a reducer. The reducer handles the logic for creating the new state, and each individual `<ListRow />` will be able to dispatch their own contents to the reducer. The `<ListRow />` has become a pure component and will have its rerender prevented by `React.memo()`.
 
 ### The Effect of Lifting the State
 
