@@ -1,5 +1,6 @@
 export { default as Banner } from './Banner';
 export * from './Firebase';
+export { default as Footer } from './Footer';
 export * from './ListBox';
 export * from './ListRows';
 export * from './MainPage';

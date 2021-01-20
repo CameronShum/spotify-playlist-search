@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components/macro';
 import firebase from 'firebase/app';
 import {
-  Banner, GlobalNominationsBox, ListBox, NominationsBox, SearchBar, SearchResultRow, SignInButton,
+  Banner, Footer, GlobalNominationsBox, ListBox,
+  NominationsBox, SearchBar, SearchResultRow, SignInButton,
 } from 'components';
 import { useGetBannerState, useOmdbApi } from 'hooks';
 import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
@@ -62,6 +63,7 @@ const MainPage = () => {
           <Seperator />
           <GlobalNominationsBox />
         </FlexRow>
+        <Footer />
       </ComponnentsContainer>
     </Container>
   );
@@ -78,7 +80,9 @@ const Container = styled.div`
 const ComponnentsContainer = styled.div`
   position: relative;
   flex: 1;
-  padding: 50px;
+  padding: 50px 50px 20px 50px;
+  display: flex;
+  flex-direction: column;
 
   @media (max-width: 600px) {
     padding: 15px;
