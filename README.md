@@ -49,8 +49,9 @@ const handleNominate = () => {
 }
 
 // Later in the code
-
-<ListRow setNomination={handleNominate}>
+<ListBox 
+  rows={nominations.map(nomination => <ListRow setNomination={handleNominate} contents={nomination}/>)}
+/>
 ```
 In this example, setNominations will change every time the prevNominations state is updated. This will trigger a rerender of all the other rows because none of the previous functions will have the same memory address as the newly created function. There is no way to avoid this problem with state management in `<MainPage />`. If each component subscribes to the changes in the state, this can be done:
 
