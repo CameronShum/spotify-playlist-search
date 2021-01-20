@@ -10,7 +10,7 @@ The design is made to be simple to be intuitive and unrestrictive to the user. T
 All buttons and icons are designed custom. All the components are built custom as well. 
 
 ## Performance
-To get better performance the app goes through a few perfomance optimizations. The rerender time for adding a component was reduced from ~30ms average per item to ~15ms average per item, measured with the React DevTools Flamegraph. 
+To get better performance the app goes through a few perfomance optimizations. The rerender time for adding a component was reduced from ~30ms average per item to ~15ms average per item, measured with the React DevTools Flamegraph. The current web app has additional rerenders for better user feedback, although many of these rerenders are <5ms. 
 
 <figure>
   <img src="https://imgur.com/WtI4hMQ.png">
@@ -75,6 +75,8 @@ This makes the reducer handle the logic (the reducer is aware of the previous st
   </figcaption>
 </figure>
 
+In this image, all rows are rerendered causing the component to take 24.3ms to rerender completely. 
+
 <figure>
   <img src="https://imgur.com/6ZfcPg1.png">
   <figcaption>
@@ -84,6 +86,8 @@ This makes the reducer handle the logic (the reducer is aware of the previous st
   </figcaption>
 </figure>
 
+In the optimized app, only the needed rows are rerendered. The two ListBox components are reduced from 11.2ms to 5.2ms and 10.3ms to 4.3ms respectively. The side effect of introducing the provider is the provider also need to rerender which has a small amount of overhead.
+
 <figure>
   <img src="https://imgur.com/Sccy3Wm.png">
   <figcaption>
@@ -92,6 +96,8 @@ This makes the reducer handle the logic (the reducer is aware of the previous st
     </em>
   </figcaption>
 </figure>
+
+The performance of the current application is similar to that of the one above. 
 
 ## Database Schema
 The database used in the app is Firebase Realtime Database. This allows for an easy authorization flow and a simple NoSql database.
@@ -126,3 +132,9 @@ A user is only allowed to read and write to their own user uid. They may write t
 The items are abstracted away from globalNominations and users to prevent data duplication and allow for easier querying.
 
 imdbId is included in each item to allow for easier querying.  
+
+## What's next
+- Tackling additional instances of unnecessary rerenders and building a React architecture that abstracts rerender optimization from the developer.
+- Database planning and migrations to allow for daily, monthly, yearly, and all nominations.
+- Custom authorization flow.
+- Creating a backend to sign omdb api requests with a uid, to remove the api key from the build package.
