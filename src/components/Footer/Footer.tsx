@@ -24,4 +24,5 @@ const FooterContainer = styled.div`
 const GithubContainer = styled.a`
   margin-left: 5px;
   margin-right: 5px;
+  color: #bdbdbd;
 `;
