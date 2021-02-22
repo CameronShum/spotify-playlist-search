@@ -1,12 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-import firebase from 'firebase/app';
-import {
-  Banner, Footer, GlobalNominationsBox, ListBox,
-  NominationsBox, SearchBar, SearchResultRow, SignInButton,
-} from 'components';
-import { useGetBannerState, useOmdbApi } from 'hooks';
-import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
+import { Banner, Footer, SearchBar } from 'components';
 
 /**
  * Main Component for the app. Contains all the major sub components
@@ -14,17 +8,9 @@ import { useFirebaseState } from 'components/Firebase/FirebaseProvider';
 
 const MainPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchType, setSearchType] = useState<'Search' | 'Id'>('Search');
+  const [searchType, setSearchType] = useState<'Song'|'Artist'>('Song');
   const [bannerVisible, setBannerVisible] = useState(false);
-  const { nominations } = useFirebaseState();
-  const { res: searchResults, err } = useOmdbApi({ searchTerm, type: searchType });
-  const uid = firebase.auth().currentUser?.uid;
-  const bannerState = useGetBannerState({
-    nominationsLength:
-    Object.keys(nominations).filter((key) => nominations[key].nominated).length,
-    uid,
-    setBannerVisible,
-  });
+  const bannerState: {type: 'warning', message: string} = { type: 'warning', message: 'Something' };
 
   return (
     <Container>
@@ -36,15 +22,15 @@ const MainPage = () => {
       />
       )}
       <ComponnentsContainer>
-        <SignInButton />
-        <Title>The Shoppies</Title>
+        {/* <SignInButton /> */}
+        <Title>Spotify Playlist Search</Title>
         <SearchBar
           searchType={searchType}
+          setSearchType={setSearchType}
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          setSearchType={setSearchType}
         />
-        <ListBox
+        {/* <ListBox
           titleText={searchTerm ? `Results for "${searchTerm}"` : 'Search Results'}
           rows={searchResults.map((result) => (
             <SearchResultRow
@@ -57,12 +43,7 @@ const MainPage = () => {
             />
           ))}
           errorMessage={`${err} Try clicking on Type: ${searchType} to switch search types.`}
-        />
-        <FlexRow>
-          <NominationsBox />
-          <Seperator />
-          <GlobalNominationsBox />
-        </FlexRow>
+        /> */}
         <Footer />
       </ComponnentsContainer>
     </Container>
@@ -87,19 +68,6 @@ const ComponnentsContainer = styled.div`
   @media (max-width: 600px) {
     padding: 15px;
   }
-`;
-
-const FlexRow = styled.div`
-  width: 100%;
-  display: flex;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-  }
-`;
-
-const Seperator = styled.div`
-  width: 30px;
 `;
 
 const Title = styled.div`

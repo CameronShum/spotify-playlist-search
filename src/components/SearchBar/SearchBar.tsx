@@ -3,8 +3,8 @@ import styled from 'styled-components/macro';
 import { XIcon } from 'icons';
 
 interface SearchBarProps {
-  searchType: 'Id' | 'Search',
-  setSearchType: React.Dispatch<'Id' | 'Search'>
+  searchType: 'Song' | 'Artist',
+  setSearchType: React.Dispatch<'Song' | 'Artist'>
   searchTerm: string,
   setSearchTerm: React.Dispatch<string>,
 }
@@ -18,13 +18,13 @@ const SearchBar = ({
   searchType, setSearchType, searchTerm, setSearchTerm,
 }: SearchBarProps) => (
   <Container>
-    <SearchTypeContainer onClick={() => setSearchType(searchType === 'Search' ? 'Id' : 'Search')}>
+    <SearchTypeContainer onClick={() => setSearchType(searchType === 'Song' ? 'Artist' : 'Song')}>
       {`Type: ${searchType}`}
     </SearchTypeContainer>
     <SearchInput
-      placeholder={searchType === 'Id'
-        ? 'Enter IMDb movie ID, ie. "tt3783958" from "https://www.imdb.com/title/tt3783958/"'
-        : 'Search for a movie, ie. "La La Land"'}
+      placeholder={searchType === 'Song'
+        ? 'Enter a song name'
+        : 'Enter an artist name'}
       onChange={(e) => setSearchTerm(e.target.value)}
       value={searchTerm}
     />
